@@ -3,158 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Doces Personalizados em Fortaleza</title>
+    <title>Any Gourmet | Doces Personalizados</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        :root { --gold: #D4AF37; --chocolate: #3D1E16; --cream: #FDFBF7; }
-        body { font-family: 'Montserrat', sans-serif; background-color: var(--cream); color: var(--chocolate); scroll-behavior: smooth; }
-        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
-        .hero-bg { background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1582176604856-e824b473652a?q=80&w=1920'); background-size: cover; background-position: center; }
-        .admin-modal { display: none; backdrop-filter: blur(10px); background: rgba(0,0,0,0.8); }
+        body { font-family: 'Montserrat', sans-serif; background-color: #FDFBF7; color: #3D1E16; scroll-behavior: smooth; }
+        h1, h2 { font-family: 'Cormorant Garamond', serif; }
     </style>
 </head>
 <body>
-
-    <header class="h-screen flex flex-col justify-center items-center text-center relative hero-bg text-white px-4">
-        <div class="border border-white/30 p-10 backdrop-blur-md">
-            <h1 class="text-6xl md:text-8xl mb-2 tracking-tighter">ANY GOURMET</h1>
-            <p class="text-lg md:text-xl font-light tracking-[0.3em] uppercase">Doces Personalizados • Fortaleza</p>
-        </div>
-        <div class="absolute bottom-10 animate-bounce cursor-pointer" onclick="document.getElementById('tradicional').scrollIntoView()">
-            <i data-lucide="chevron-down" class="w-10 h-10"></i>
-        </div>
+    <header class="h-screen flex flex-col justify-center items-center text-center bg-stone-100 px-4">
+        <h1 class="text-6xl md:text-8xl mb-4 tracking-tighter uppercase">Any Gourmet</h1>
+        <p class="tracking-[0.3em] uppercase text-sm">Doces Personalizados • Fortaleza</p>
     </header>
 
-    <nav class="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-stone-200">
-        <div class="max-w-6xl mx-auto px-6 py-5 flex justify-center space-x-10 text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase">
-            <a href="#tradicional" class="hover:text-gold transition">Tradicional</a>
-            <a href="#especial" class="hover:text-gold transition">Especial</a>
-            <a href="#premium" class="hover:text-gold transition">Premium</a>
-            <button onclick="openAdmin()" class="text-stone-400 hover:text-chocolate underline">Admin</button>
-        </div>
+    <nav class="sticky top-0 z-50 bg-[#FDFBF7]/90 backdrop-blur-md border-b py-4 flex justify-center gap-8 text-[10px] uppercase font-bold tracking-widest">
+        <a href="#tradicional" class="hover:text-amber-600">Tradicional</a>
+        <a href="#especial" class="hover:text-amber-600">Especial</a>
+        <a href="#premium" class="hover:text-amber-600">Premium</a>
+        <button onclick="document.getElementById('adminPanel').style.display='flex'" class="text-stone-400">Admin</button>
     </nav>
 
-    <main id="app" class="max-w-7xl mx-auto px-6 py-20">
+    <main id="vitrine" class="max-w-6xl mx-auto py-20 px-6 space-y-32">
         </main>
 
-    <footer class="bg-[#1a1a1a] text-white py-20 px-6 text-center">
-        <h2 class="text-3xl mb-10 italic">A doçura em cada detalhe</h2>
-        <div class="flex flex-wrap justify-center gap-6">
-            <a href="https://api.whatsapp.com/send/?phone=5585992000433" class="flex items-center gap-2 border border-white/20 px-10 py-4 hover:bg-gold transition uppercase text-xs tracking-widest">
-                <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
-            </a>
-            <a href="https://www.instagram.com/anygourmet_" class="flex items-center gap-2 border border-white/20 px-10 py-4 hover:bg-white hover:text-black transition uppercase text-xs tracking-widest">
-                <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
-            </a>
+    <footer class="bg-stone-900 text-white py-20 text-center">
+        <div class="flex justify-center gap-6 mb-8">
+            <a href="https://api.whatsapp.com/send/?phone=5585992000433" class="border border-white/20 px-8 py-3 hover:bg-white hover:text-black transition">WHATSAPP</a>
+            <a href="https://www.instagram.com/anygourmet_" class="border border-white/20 px-8 py-3 hover:bg-white hover:text-black transition">INSTAGRAM</a>
         </div>
-        <p class="mt-16 text-[10px] text-stone-500 uppercase tracking-widest">Aviso: Contém lactose. Pode conter glúten, amendoim ou corantes.</p>
+        <p class="text-[10px] opacity-50 uppercase tracking-tighter">Contém lactose. Pode conter glúten e amendoim.</p>
     </footer>
 
-    <div id="adminPanel" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto p-8 rounded-lg shadow-2xl">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold uppercase tracking-widest text-chocolate">Painel Administrativo</h2>
-                <button onclick="closeAdmin()" class="text-red-500 font-bold">FECHAR [X]</button>
+    <div id="adminPanel" class="fixed inset-0 bg-black/90 z-[60] hidden items-center justify-center p-4">
+        <div class="bg-white p-8 w-full max-w-md rounded shadow-2xl">
+            <div class="flex justify-between mb-6"><h2 class="text-xl font-bold">ACESSO RESTRITO</h2><button onclick="this.closest('#adminPanel').style.display='none'">[X]</button></div>
+            <input type="password" id="adminPass" placeholder="Senha" class="w-full p-3 border mb-4">
+            <button onclick="entrarAdmin()" class="w-full bg-stone-900 text-white py-3">ENTRAR</button>
+            <div id="editor" class="hidden mt-6 space-y-4 max-h-60 overflow-y-auto">
+                <p class="text-xs italic text-stone-500">Altere as URLs das imagens aqui e clique em Salvar.</p>
+                <div id="listaEditor"></div>
+                <button onclick="salvarAlteracoes()" class="w-full bg-green-600 text-white py-3 mt-4">SALVAR MUDANÇAS</button>
             </div>
-            
-            <div id="loginForm" class="text-center py-20">
-                <input type="text" id="userInput" placeholder="Usuário" class="block mx-auto mb-4 p-3 border w-64 rounded">
-                <input type="password" id="passInput" placeholder="Senha" class="block mx-auto mb-6 p-3 border w-64 rounded">
-                <button onclick="handleLogin()" class="bg-chocolate text-white px-10 py-3 rounded uppercase tracking-widest text-sm">Entrar</button>
-            </div>
-
-            <div id="adminEditor" class="hidden grid grid-cols-1 gap-6">
-                </div>
         </div>
     </div>
 
     <script>
-        // Dados Iniciais (Database)
-        let doces = JSON.parse(localStorage.getItem('anyGourmetDB')) || {
-            tradicional: [
-                { nome: 'Brigadeiro Belga', desc: 'Chocolate ao leite premium, leite condensado e manteiga sem sal.', preco: '1,80', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=800' },
-                { nome: 'Ninho', desc: 'Leite Ninho em pó, creme de leite e textura delicada.', preco: '1,80', img: 'https://images.unsplash.com/photo-1548943487-a2e4b43b4853?q=80&w=800' }
-            ],
-            especial: [
-                { nome: 'Red Velvet', desc: 'Chocolate branco, baunilha e coloração natural vermelha.', preco: '1,90', img: 'https://images.unsplash.com/photo-1586788680434-30d3246718d0?q=80&w=800' }
-            ],
-            premium: [
-                { nome: 'Ferrero', desc: 'Chocolate, Nutella e avelã torrada crocante.', preco: '2,00', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=800' }
-            ]
+        let db = JSON.parse(localStorage.getItem('anyGourmetDB')) || {
+            tradicional: [{nome: 'Brigadeiro Belga', desc: 'Chocolate premium e granulado.', img: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?q=80&w=600'}],
+            especial: [{nome: 'Red Velvet', desc: 'Massa aveludada com chocolate branco.', img: 'https://images.unsplash.com/photo-1586788680434-30d3246718d0?q=80&w=600'}],
+            premium: [{nome: 'Ferrero', desc: 'Avelã e Nutella original.', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?q=80&w=600'}]
         };
 
-        function renderSite() {
-            const app = document.getElementById('app');
-            app.innerHTML = '';
-            
-            for (const categoria in doces) {
-                let html = `
-                    <section id="${categoria}" class="mb-32">
-                        <h2 class="text-4xl md:text-5xl text-center mb-16 uppercase tracking-widest">${categoria}</h2>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-                            ${doces[categoria].map((doce, idx) => `
-                                <div class="group">
-                                    <div class="overflow-hidden rounded-sm mb-4 aspect-square bg-stone-100">
-                                        <img src="${doce.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
-                                    </div>
-                                    <h3 class="text-xl font-bold mb-2">${doce.nome}</h3>
-                                    <p class="text-xs text-stone-500 leading-relaxed mb-4">${doce.desc}</p>
-                                    <p class="text-gold font-bold">R$ ${doce.preco} /un</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </section>
-                `;
-                app.innerHTML += html;
+        function render() {
+            const vitrine = document.getElementById('vitrine');
+            vitrine.innerHTML = '';
+            for(let cat in db) {
+                vitrine.innerHTML += `<section id="${cat}"><h2 class="text-4xl mb-12 uppercase text-center">${cat}</h2><div class="grid grid-cols-1 md:grid-cols-3 gap-10">` + 
+                db[cat].map((d, i) => `<div class="space-y-4"><img src="${d.img}" class="w-full aspect-square object-cover shadow-lg"><h3 class="text-xl font-bold uppercase">${d.nome}</h3><p class="text-sm opacity-70">${d.desc}</p></div>`).join('') + `</div></section>`;
             }
             lucide.createIcons();
         }
 
-        // Funções Admin
-        function openAdmin() { document.getElementById('adminPanel').style.display = 'flex'; }
-        function closeAdmin() { document.getElementById('adminPanel').style.display = 'none'; }
-        
-        function handleLogin() {
-            const user = document.getElementById('userInput').value;
-            const pass = document.getElementById('passInput').value;
-            if (user === '@Gourmet2026' && pass === '@Andjr2026') {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('adminEditor').classList.remove('hidden');
-                loadEditor();
-            } else { alert('Acesso Negado'); }
-        }
-
-        function loadEditor() {
-            const editor = document.getElementById('adminEditor');
-            editor.innerHTML = '<p class="text-stone-400 italic mb-4 text-center">Cole novas URLs de imagens ou mude os preços abaixo e clique em Salvar.</p>';
-            
-            for (const cat in doces) {
-                doces[cat].forEach((doce, idx) => {
-                    editor.innerHTML += `
-                        <div class="p-4 border border-stone-100 bg-stone-50 flex flex-col gap-2 rounded">
-                            <span class="text-[10px] font-bold uppercase">${cat}</span>
-                            <input type="text" value="${doce.nome}" onchange="updateData('${cat}', ${idx}, 'nome', this.value)" class="p-2 border font-bold">
-                            <input type="text" value="${doce.img}" onchange="updateData('${cat}', ${idx}, 'img', this.value)" placeholder="URL da Imagem" class="p-2 border text-xs italic">
-                            <input type="text" value="${doce.preco}" onchange="updateData('${cat}', ${idx}, 'preco', this.value)" class="p-2 border w-24">
-                        </div>
-                    `;
+        function entrarAdmin() {
+            if(document.getElementById('adminPass').value === '@Andjr2026') {
+                document.getElementById('editor').classList.remove('hidden');
+                const lista = document.getElementById('listaEditor');
+                lista.innerHTML = '';
+                for(let c in db) db[c].forEach((d, i) => {
+                    lista.innerHTML += `<div class="p-2 border mb-2 text-[10px] uppercase font-bold">${d.nome}<input type="text" value="${d.img}" onchange="db['${c}'][${i}].img=this.value" class="w-full p-1 border font-normal lowercase italic mt-1"></div>`;
                 });
-            }
-            editor.innerHTML += `<button onclick="saveAll()" class="bg-green-600 text-white p-4 font-bold rounded mt-6">SALVAR TODAS AS ALTERAÇÕES</button>`;
+            } else { alert('Senha incorreta'); }
         }
 
-        function updateData(cat, idx, field, val) { doces[cat][idx][field] = val; }
-
-        function saveAll() {
-            localStorage.setItem('anyGourmetDB', JSON.stringify(doces));
-            alert('Dados atualizados com sucesso!');
-            renderSite();
-            closeAdmin();
+        function salvarAlteracoes() {
+            localStorage.setItem('anyGourmetDB', JSON.stringify(db));
+            alert('Sucesso! As novas fotos aparecerão neste navegador.');
+            location.reload();
         }
 
-        renderSite();
+        render();
     </script>
 </body>
 </html>
+
