@@ -125,7 +125,6 @@
                 if (error) {
                     led.className = "w-2 h-2 rounded-full bg-red-500";
                     textoStatus.innerText = "Erro de Conexão";
-                    console.error("Erro Supabase:", error.message);
                 } else {
                     led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
                     textoStatus.innerText = "Catálogo Online";
@@ -232,8 +231,18 @@
         async function fazerLogin() {
             const email = document.getElementById('userEmail').value;
             const password = document.getElementById('userPass').value;
+            
+            // Tenta logar no Supabase
             const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-            if (error) { alert("Erro do Supabase: " + error.message); } else { document.body.classList.add('is-admin'); toggleLoginModal(false); alert("Bem-vindo, Admin!"); }
+            
+            if (error) {
+                // ESTA LINHA É DIFERENTE DO SEU PRINT!
+                alert("Erro do Supabase: " + error.message);
+            } else {
+                document.body.classList.add('is-admin');
+                toggleLoginModal(false);
+                alert("Bem-vindo, Admin!");
+            }
         }
 
         async function logoutAdmin() { await _supabase.auth.signOut(); document.body.classList.remove('is-admin'); alert("Sessão encerrada."); }
