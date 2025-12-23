@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Catálogo</title>
+    <title>Any Gourmet | Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
@@ -17,49 +17,38 @@
 </head>
 <body class="text-stone-800 pb-24">
 
-    <header class="py-10 bg-white text-center border-b border-stone-100 shadow-sm">
+    <header class="py-10 bg-white text-center border-b border-stone-100">
         <h1 class="text-3xl font-serif tracking-widest uppercase text-stone-900">Any Gourmet</h1>
         <div id="status-conexao" class="flex items-center justify-center gap-2 mt-2">
             <div id="led" class="w-2 h-2 rounded-full bg-orange-400"></div>
-            <span id="texto-status" class="text-[9px] uppercase tracking-widest text-stone-400 font-bold">Iniciando...</span>
+            <span id="texto-status" class="text-[9px] uppercase tracking-widest text-stone-400 font-bold">Conectando...</span>
         </div>
     </header>
 
     <main id="vitrine" class="customer-section max-w-4xl mx-auto px-6 py-10">
-        <div id="loading-area" class="text-center py-20">
-            <p class="text-[10px] uppercase tracking-widest text-stone-400 animate-pulse">Carregando doçuras...</p>
+        <div id="loading-area" class="text-center py-20 text-stone-400 text-[10px] uppercase font-bold animate-pulse">
+            Buscando catálogo...
         </div>
     </main>
 
     <main class="admin-section max-w-4xl mx-auto px-6 py-10">
         <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-xl font-serif italic font-bold">Gestão Any Gourmet</h2>
+            <h2 class="text-xl font-serif italic font-bold">Painel de Gestão</h2>
             <button onclick="location.reload()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full font-bold uppercase">Sair</button>
         </div>
 
         <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100 mb-8">
             <h3 class="text-[10px] uppercase font-bold mb-4 text-stone-400 tracking-widest">Cadastrar Sabor</h3>
             <div class="space-y-4">
-                <input type="text" id="new-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border focus:border-stone-200">
-                <input type="text" id="new-categoria" placeholder="Categoria (ex: Tradicional)" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border focus:border-stone-200">
-                <input type="text" id="new-img" placeholder="URL da Imagem" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border focus:border-stone-200">
-                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg">Salvar Doce</button>
+                <input type="text" id="new-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-2xl border outline-none">
+                <input type="text" id="new-categoria" placeholder="Categoria (ex: Tradicional)" class="w-full p-4 bg-stone-50 rounded-2xl border outline-none">
+                <input type="text" id="new-img" placeholder="Link da Imagem" class="w-full p-4 bg-stone-50 rounded-2xl border outline-none">
+                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-2xl font-bold uppercase text-xs tracking-widest">Salvar no Banco</button>
             </div>
         </section>
 
-        <div id="admin-list" class="space-y-3 font-bold">
-            </div>
+        <div id="admin-list" class="space-y-3 font-bold"></div>
     </main>
-
-    <div id="modalLogin" class="fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-serif mb-6 text-center italic">Identifique-se</h2>
-            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 border outline-none">
-            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 border outline-none">
-            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs">Entrar no Painel</button>
-            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold">Voltar</button>
-        </div>
-    </div>
 
     <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t text-center z-40">
         <button onclick="abrirLogin()" id="btn-adm-text" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400">
@@ -67,19 +56,28 @@
         </button>
     </footer>
 
+    <div id="modalLogin" class="fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+            <h2 class="text-2xl font-serif mb-6 text-center italic">Acesso</h2>
+            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 border outline-none">
+            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 border outline-none">
+            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs">Entrar</button>
+            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold text-center">Voltar</button>
+        </div>
+    </div>
+
     <script>
         const S_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
-        const S_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
+        // USANDO A CHAVE SERVICE ROLE QUE VOCÊ ENVIOU
+        const S_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NjI0NzUwMCwiZXhwIjoyMDgxODIzNTAwfQ.1s49WtFyqD75dh5ypfg0cBvyI7aOtDp1AvxL9Re8IIU';
 
         const _supabase = supabase.createClient(S_URL, S_KEY);
 
         async function carregarDados() {
             const led = document.getElementById('led');
             const texto = document.getElementById('texto-status');
-            
             try {
                 const { data, error } = await _supabase.from('doces').select('*');
-                
                 if (error) {
                     led.className = "w-2 h-2 rounded-full bg-red-500";
                     texto.innerText = "Erro: " + error.message;
@@ -89,9 +87,7 @@
                     renderizarVitrine(data || []);
                     renderizarListaAdmin(data || []);
                 }
-            } catch (e) {
-                texto.innerText = "Erro de conexão";
-            }
+            } catch (e) { texto.innerText = "Erro de conexão"; }
         }
 
         function abrirLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
@@ -101,14 +97,12 @@
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPass').value;
             const { error } = await _supabase.auth.signInWithPassword({ email, password: pass });
-            
-            if (error) {
-                alert("Erro: " + error.message);
-            } else {
+            if (error) alert("Erro: " + error.message);
+            else {
                 fecharLogin();
                 document.body.classList.add('is-admin');
-                document.getElementById('btn-adm-text').innerText = "Modo Gestão Ativado";
-                alert("Bem-vinda de volta!");
+                document.getElementById('btn-adm-text').innerText = "Painel Liberado";
+                alert("Login realizado!");
             }
         }
 
@@ -116,28 +110,26 @@
             const nome = document.getElementById('new-nome').value;
             const categoria = document.getElementById('new-categoria').value;
             const imagem_url = document.getElementById('new-img').value;
-
-            if(!nome) return alert("O nome é obrigatório!");
-
+            if(!nome) return alert("Digite o nome");
             const { error } = await _supabase.from('doces').insert([{ nome, categoria, imagem_url }]);
-            if(error) alert("Erro ao salvar: " + error.message);
-            else { alert("Salvo!"); location.reload(); }
+            if(error) alert(error.message);
+            else { alert("Cadastrado!"); location.reload(); }
         }
 
         async function excluirDoce(id) {
-            if(!confirm("Remover do catálogo?")) return;
-            const { error } = await _supabase.from('doces').delete().eq('id', id);
+            if(!confirm("Excluir?")) return;
+            await _supabase.from('doces').delete().eq('id', id);
             location.reload();
         }
 
         function renderizarVitrine(lista) {
             const container = document.getElementById('vitrine');
             if(lista.length === 0) {
-                container.innerHTML = `<p class='text-center py-20 text-stone-400 text-[10px] uppercase font-bold tracking-[0.2em]'>Seu catálogo está vazio.</p>`;
+                container.innerHTML = `<p class='text-center py-20 text-stone-400 text-[10px] uppercase font-bold tracking-widest'>Catálogo vazio.</p>`;
                 return;
             }
             container.innerHTML = lista.map(d => `
-                <div class="bg-white p-5 rounded-[2.5rem] border border-stone-50 mb-4 flex items-center gap-5 shadow-sm">
+                <div class="bg-white p-5 rounded-[2.5rem] border border-stone-100 mb-4 flex items-center gap-5 shadow-sm">
                     <img src="${d.imagem_url || 'https://via.placeholder.com/150'}" class="w-20 h-20 rounded-3xl object-cover bg-stone-50">
                     <div>
                         <h3 class="font-bold text-sm uppercase text-stone-900">${d.nome}</h3>
@@ -152,7 +144,7 @@
             container.innerHTML = lista.map(d => `
                 <div class="flex justify-between items-center p-4 bg-white border border-stone-100 rounded-2xl mb-2">
                     <span class="text-xs font-bold text-stone-600">${d.nome}</span>
-                    <button onclick="excluirDoce(${d.id})" class="text-[9px] text-red-400 font-bold uppercase bg-red-50 px-3 py-2 rounded-xl">Excluir</button>
+                    <button onclick="excluirDoce(${d.id})" class="text-[9px] text-red-400 font-bold uppercase bg-red-50 px-3 py-2 rounded-xl shadow-sm">Excluir</button>
                 </div>
             `).join('');
         }
@@ -160,5 +152,5 @@
         window.onload = carregarDados;
     </script>
 </body>
-                    </html>
-    
+    </html>
+
