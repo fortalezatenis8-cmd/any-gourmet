@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Oficial</title>
+    <title>Any Gourmet | Confeitaria Artesanal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700;1,900&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
@@ -13,204 +13,272 @@
         .admin-section { display: none; }
         body.is-admin .admin-section { display: block; }
         body.is-admin .customer-section { display: none; }
+        .cart-count { transform: scale(0.8); transform-origin: top right; }
         .modal { transition: opacity 0.3s ease-out, visibility 0.3s ease-out; }
-        .modal.hidden { opacity: 0; visibility: hidden; }
-        .modal.visible { opacity: 1; visibility: visible; }
+        .modal.hidden { opacity: 0; visibility: hidden; display: none; }
+        .modal.visible { opacity: 1; visibility: visible; display: flex; }
     </style>
 </head>
-<body class="pb-24">
+<body class="pb-24" onload="carregarDados()">
+
     <header class="py-8 bg-white text-center border-b border-stone-100 shadow-sm sticky top-0 z-40">
         <div class="max-w-6xl mx-auto flex justify-between items-center px-6">
-            <h1 class="text-3xl font-serif-display tracking-wide uppercase text-stone-900 flex-grow text-center">Any Gourmet</h1>
+            <h1 class="text-3xl md:text-4xl font-serif-display tracking-wide uppercase text-stone-900 flex-grow">Any Gourmet</h1>
+            
             <div class="flex items-center gap-4">
                 <div id="status-conexao" class="flex items-center gap-2">
                     <div id="led" class="w-2 h-2 rounded-full bg-orange-400"></div>
+                    <span id="texto-status" class="text-[9px] uppercase tracking-widest text-stone-400 font-bold hidden md:inline">Conectando...</span>
                 </div>
-                <button onclick="toggleCartModal(true)" class="relative p-2 rounded-full bg-stone-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.215 1.028a4.125 4.125 0 011.17 2.054l.707 3.492a3.75 3.75 0 00.912 1.746c.144.144.273.284.402.413l.081.082a3.75 3.75 0 003.044 1.258h1.347c.789 0 1.406.494 1.48 1.144L17.5 17.25h1.875c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125h-15c-.621 0-1.125-.504-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125H6.25l-.27-1.35a3.75 3.75 0 00-.91-1.745l-.708-3.491A4.125 4.125 0 002.25 3z" /></svg>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
+
+                <button onclick="toggleCartModal(true)" class="relative p-2 rounded-full bg-stone-100 hover:bg-stone-200 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-stone-700">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.215 1.028a4.125 4.125 0 011.17 2.054l.707 3.492a3.75 3.75 0 00.912 1.746c.144.144.273.284.402.413l.081.082a3.75 3.75 0 003.044 1.258h1.347c.789 0 1.406.494 1.48 1.144L17.5 17.25h1.875c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125h-15c-.621 0-1.125-.504-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125H6.25l-.27-1.35a3.75 3.75 0 00-.91-1.745l-.708-3.491A4.125 4.125 0 002.25 3zM15 12.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
+                    </svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center cart-count">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main id="vitrine" class="customer-section max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></main>
+    <main id="vitrine" class="customer-section max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div id="loading-area" class="col-span-full text-center py-20 text-stone-300 text-[10px] uppercase font-bold animate-pulse">
+            Preparando os sabores...
+        </div>
+    </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t text-center z-40">
-        <button onclick="toggleLoginModal(true)" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400">Área Restrita</button>
-    </footer>
-    
-    <div id="modalCart" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[90] backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-[3rem] w-full max-w-lg shadow-2xl flex flex-col max-h-[80vh]">
-            <h2 class="text-2xl font-serif-display mb-6 text-center italic">Seu Pedido</h2>
-            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4 mb-6"></div>
-            <div class="border-t pt-4 flex justify-between font-bold text-lg text-stone-800">
-                <span>Total:</span><span id="cart-total">R$ 0,00</span>
+    <main class="admin-section max-w-4xl mx-auto px-6 py-12">
+        <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h2 class="text-2xl font-serif-display italic font-bold text-stone-800">Painel de Gestão</h2>
+            <button onclick="logoutAdmin()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full font-bold uppercase hover:bg-stone-300 transition-colors">Sair</button>
+        </div>
+
+        <section class="bg-white p-8 rounded-[2rem] shadow-md border border-stone-100 mb-8">
+            <h3 class="text-[11px] uppercase font-bold mb-5 text-stone-500 tracking-widest text-center">
+                <span id="form-title">Cadastrar Novo Sabor</span>
+            </h3>
+            <div class="space-y-4">
+                <input type="hidden" id="doce-id">
+                <input type="text" id="doce-nome" placeholder="Nome do Doce (ex: Bolo Red Velvet)" class="w-full p-4 bg-stone-50 rounded-xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300 text-sm">
+                <input type="text" id="doce-categoria" placeholder="Categoria (ex: Bolos, Clássicos)" class="w-full p-4 bg-stone-50 rounded-xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300 text-sm">
+                <input type="text" id="doce-preco" placeholder="Preço Base (ex: 25.00 - use ponto)" class="w-full p-4 bg-stone-50 rounded-xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300 text-sm">
+                <input type="text" id="doce-img" placeholder="URL da Imagem (Link direto)" class="w-full p-4 bg-stone-50 rounded-xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300 text-sm">
+                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-xl font-bold uppercase text-xs tracking-widest hover:bg-stone-800 transition-colors shadow-lg">Salvar Doce</button>
+                <button id="cancel-edit-btn" onclick="limparFormulario()" class="w-full bg-stone-100 text-stone-600 p-3 rounded-xl font-bold uppercase text-xs tracking-widest hidden hover:bg-stone-200 transition-colors">Cancelar Edição</button>
             </div>
-            <button onclick="enviarPedidoWhatsapp()" class="w-full bg-green-500 text-white p-4 rounded-xl font-bold uppercase text-xs mt-6">Enviar via WhatsApp</button>
-            <button onclick="toggleCartModal(false)" class="text-stone-400 text-[10px] mt-4 uppercase font-bold text-center w-full">Voltar</button>
+        </section>
+
+        <div id="admin-list" class="space-y-3"></div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t border-stone-100 text-center z-40">
+        <button onclick="abrirLogin()" id="btn-adm-text" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400 hover:text-stone-900 transition-colors">
+            Área Restrita
+        </button>
+    </footer>
+
+    <div id="modalLogin" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[3rem] w-full max-w-sm shadow-2xl">
+            <h2 class="text-2xl font-serif-display mb-6 text-center italic text-stone-800">Login Admin</h2>
+            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-xl mb-4 border-none ring-1 ring-stone-200 outline-none text-sm">
+            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-xl mb-6 border-none ring-1 ring-stone-200 outline-none text-sm">
+            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-xl font-bold uppercase text-xs hover:bg-stone-800 transition-colors">Acessar Painel</button>
+            <button onclick="toggleLoginModal(false)" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold text-center hover:text-stone-600 transition-colors">Voltar ao Site</button>
         </div>
     </div>
 
-    <main class="admin-section max-w-4xl mx-auto px-6 py-12">
-        <div class="bg-white p-8 rounded-[2rem] shadow-md border mb-8">
-            <h3 class="text-[11px] uppercase font-bold mb-5 text-center tracking-widest text-stone-400">Gestão de Sabores</h3>
-            <div class="space-y-4">
-                <input type="hidden" id="doce-id">
-                <input type="text" id="doce-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="text" id="doce-categoria" placeholder="Categoria" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="number" id="doce-preco" placeholder="Preço (ex: 15.50)" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="text" id="doce-img" placeholder="Link da Imagem" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-xl font-bold uppercase text-xs">Salvar Item</button>
+    <div id="modalCart" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[90] backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[3rem] w-full max-w-lg shadow-2xl max-h-[90vh] flex flex-col">
+            <h2 class="text-2xl font-serif-display mb-6 text-center italic text-stone-800">Seu Pedido</h2>
+            
+            <div id="cart-items" class="flex-grow overflow-y-auto pr-2 -mr-2 space-y-4 mb-6">
+                <p id="empty-cart-message" class="text-center text-stone-400 text-sm italic">Carrinho vazio.</p>
             </div>
-        </div>
-        <div id="admin-list" class="space-y-3"></div>
-        <button onclick="location.reload()" class="w-full mt-8 text-stone-400 uppercase text-[10px] font-bold">Sair do Painel</button>
-    </main>
 
-    <div id="modalLogin" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100]">
-        <div class="bg-white p-8 rounded-[3rem] w-full max-w-sm">
-            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-xl mb-4 outline-none ring-1 ring-stone-100 text-sm">
-            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-xl mb-6 outline-none ring-1 ring-stone-200 text-sm">
-            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-xl font-bold uppercase text-xs">Entrar</button>
-            <button onclick="toggleLoginModal(false)" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold">Cancelar</button>
+            <div id="cart-summary" class="border-t border-stone-100 pt-4 flex justify-between items-center text-lg font-bold text-stone-800">
+                <span>Total:</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+
+            <button onclick="enviarPedidoWhatsapp()" class="w-full bg-green-500 text-white p-4 rounded-xl font-bold uppercase text-xs mt-6 hover:bg-green-600 transition-colors shadow-lg">
+                Enviar Pedido via WhatsApp
+            </button>
+            <button onclick="toggleCartModal(false)" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold text-center hover:text-stone-600 transition-colors">
+                Continuar Comprando
+            </button>
         </div>
     </div>
         <script>
-        // CONFIGURAÇÕES DE CONEXÃO
-        const S_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
-        const S_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
-        const _supabase = supabase.createClient(S_URL, S_KEY);
+        const SUPABASE_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
+        const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let produtos = [], carrinho = {};
+        let produtos = [];
+        let carrinho = {};
 
-        // CARREGAMENTO INICIAL
         async function carregarDados() {
-            localStorage.clear(); // Limpa caches antigos
-            const { data, error } = await _supabase.from('doces').select('*').order('created_at', { ascending: false });
-            
-            if (error) {
-                document.getElementById('led').className = "w-2 h-2 rounded-full bg-red-500";
-                console.error("Erro Supabase:", error);
-            } else {
-                document.getElementById('led').className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_green]";
-                produtos = data || [];
-                renderizar();
-            }
+            const led = document.getElementById('led');
+            const textoStatus = document.getElementById('texto-status');
+            try {
+                const { data, error } = await _supabase.from('doces').select('*').order('created_at', { ascending: false });
+                if (error) {
+                    led.className = "w-2 h-2 rounded-full bg-red-500";
+                    textoStatus.innerText = "Erro de Conexão";
+                } else {
+                    led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
+                    textoStatus.innerText = "Catálogo Online";
+                    produtos = data || [];
+                    renderizarVitrine(produtos);
+                    renderizarListaAdmin(produtos);
+                    checkAdminSession(); 
+                }
+            } catch (e) { console.error(e); }
         }
 
-        // RENDERIZAÇÃO DA VITRINE E LISTA ADMIN
-        function renderizar() {
-            const v = document.getElementById('vitrine');
-            const a = document.getElementById('admin-list');
-            
-            v.innerHTML = produtos.map(p => `
-                <div class="bg-white p-6 rounded-[2.5rem] border shadow-sm text-center flex flex-col items-center">
-                    <img src="${p.imagem_url || ''}" class="w-32 h-32 rounded-2xl object-cover bg-stone-50 mb-4 shadow-sm">
-                    <h3 class="font-bold text-xs uppercase mb-1 tracking-wider">${p.nome}</h3>
-                    <p class="text-[10px] text-stone-400 uppercase mb-3 tracking-widest">${p.categoria}</p>
-                    <p class="font-bold text-lg mb-4 text-stone-800">R$ ${parseFloat(p.preco).toFixed(2).replace('.', ',')}</p>
-                    <button onclick="addCarrinho(${p.id})" class="bg-stone-900 text-white text-[10px] font-bold px-8 py-3 rounded-full uppercase hover:bg-stone-700 transition-all">Adicionar ao Pedido</button>
+        function renderizarVitrine(lista) {
+            const container = document.getElementById('vitrine');
+            if (lista.length === 0) {
+                container.innerHTML = `<p class='col-span-full text-center py-20 text-stone-400 text-sm italic'>Nenhum doce cadastrado.</p>`;
+                return;
+            }
+            container.innerHTML = lista.map(d => `
+                <div class="bg-white p-5 rounded-3xl border border-stone-100 flex flex-col items-center text-center shadow-md hover:shadow-lg transition-shadow">
+                    <img src="${d.imagem_url || 'https://via.placeholder.com/150'}" class="w-32 h-32 rounded-2xl object-cover bg-stone-50 mb-4 shadow-inner">
+                    <h3 class="font-bold text-base uppercase text-stone-900 tracking-wider mb-1">${d.nome}</h3>
+                    <p class="text-xs text-stone-500 uppercase tracking-widest mb-3">${d.categoria}</p>
+                    <p class="text-xl font-bold text-stone-800 mb-4">R$ ${parseFloat(d.preco || 0).toFixed(2).replace('.', ',')}</p>
+                    <button onclick="adicionarAoCarrinho(${d.id})" class="bg-pink-600 text-white px-6 py-3 rounded-full font-bold text-xs uppercase hover:bg-pink-700 transition-colors shadow-md">
+                        Adicionar ao Carrinho
+                    </button>
                 </div>
             `).join('');
-
-            a.innerHTML = produtos.map(p => `
-                <div class="flex justify-between items-center p-4 bg-white border rounded-2xl text-[10px] font-bold uppercase shadow-sm">
-                    <span>${p.nome}</span>
-                    <button onclick="excluir(${p.id})" class="text-red-500 bg-red-50 px-3 py-1 rounded-lg">Excluir</button>
-                </div>
-            `).join('');
         }
 
-        // LÓGICA DO CARRINHO E PRECIFICAÇÃO
-        function addCarrinho(id) {
-            const p = produtos.find(i => i.id === id);
-            if (carrinho[id]) {
-                carrinho[id].qtd += 1;
-            } else {
-                carrinho[id] = { ...p, qtd: 1 };
-            }
-            atualizarCarrinho();
-        }
-
-        function atualizarCarrinho() {
-            const items = Object.values(carrinho);
-            let totalGeral = 0, totalItens = 0;
-            
-            document.getElementById('cart-items').innerHTML = items.map(i => {
-                // Aqui você pode ajustar a lógica de precificação se houver descontos por atacado
-                const subtotal = i.preco * i.qtd;
-                totalGeral += subtotal;
-                totalItens += i.qtd;
-                
-                return `
-                    <div class="flex justify-between items-center text-xs font-bold uppercase border-b border-stone-50 pb-2">
-                        <span>${i.qtd}x ${i.nome}</span>
-                        <span>R$ ${subtotal.toFixed(2).replace('.', ',')}</span>
+        function renderizarListaAdmin(lista) {
+            const container = document.getElementById('admin-list');
+            container.innerHTML = lista.map(d => `
+                <div class="flex items-center justify-between p-4 bg-white border border-stone-100 rounded-2xl shadow-sm">
+                    <div class="flex items-center gap-3">
+                        <img src="${d.imagem_url || 'https://via.placeholder.com/50'}" class="w-12 h-12 rounded-xl object-cover bg-stone-50">
+                        <div><p class="text-sm font-bold text-stone-800 uppercase">${d.nome}</p><p class="text-[10px] text-stone-500 uppercase tracking-widest">R$ ${parseFloat(d.preco || 0).toFixed(2).replace('.', ',')}</p></div>
                     </div>
-                `;
-            }).join('');
-
-            document.getElementById('cart-total').innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-            document.getElementById('cart-count').innerText = totalItens;
+                    <div class="flex gap-2">
+                        <button onclick="editarDoce(${d.id})" class="text-[10px] text-blue-500 font-bold uppercase bg-blue-50 px-3 py-1 rounded-md hover:bg-blue-100">Editar</button>
+                        <button onclick="excluirDoce(${d.id})" class="text-[10px] text-red-500 font-bold uppercase bg-red-50 px-3 py-1 rounded-md hover:bg-red-100">Excluir</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        // ENVIO PARA WHATSAPP
-        function enviarPedidoWhatsapp() {
-            const itens = Object.values(carrinho);
-            if (itens.length === 0) return alert("O carrinho está vazio!");
-
-            let msg = "*Novo Pedido - Any Gourmet*\n\n";
-            itens.forEach(i => {
-                msg += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2).replace('.', ',')}\n`;
-            });
-            msg += `\n*TOTAL: ${document.getElementById('cart-total').innerText}*`;
-            
-            const fone = "5585992000433"; // Seu número atualizado
-            window.open(`https://wa.me/${fone}?text=${encodeURIComponent(msg)}`);
+        function adicionarAoCarrinho(idDoce) {
+            const doce = produtos.find(p => p.id === idDoce);
+            if (!doce) return;
+            if (carrinho[idDoce]) { carrinho[idDoce].quantidade++; } else { carrinho[idDoce] = { ...doce, quantidade: 1 }; }
+            atualizarCarrinhoUI();
         }
 
-        // FUNÇÕES ADMINISTRATIVAS
-        async function salvarDoce() {
-            const n = document.getElementById('doce-nome').value;
-            const c = document.getElementById('doce-categoria').value;
-            const p = document.getElementById('doce-preco').value;
-            const i = document.getElementById('doce-img').value;
-
-            if(!n || !p) return alert("Preencha ao menos Nome e Preço!");
-
-            const { error } = await _supabase.from('doces').insert([{ nome: n, categoria: c, preco: p, imagem_url: i }]);
-            
-            if (error) alert("Erro ao salvar: " + error.message); 
-            else location.reload();
+        function removerDoCarrinho(idDoce) {
+            if (carrinho[idDoce]) { carrinho[idDoce].quantidade--; if (carrinho[idDoce].quantidade <= 0) delete carrinho[idDoce]; }
+            atualizarCarrinhoUI();
         }
 
-        async function excluir(id) {
-            if(confirm("Deseja realmente excluir este item?")) {
-                const { error } = await _supabase.from('doces').delete().eq('id', id);
-                if (error) alert(error.message);
-                else location.reload();
+        function atualizarCarrinhoUI() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartCountElement = document.getElementById('cart-count');
+            const cartTotalElement = document.getElementById('cart-total');
+            const emptyMessage = document.getElementById('empty-cart-message');
+            let totalItens = 0, valorTotal = 0;
+            cartItemsContainer.innerHTML = '';
+            const itensNoCarrinho = Object.values(carrinho);
+            if (itensNoCarrinho.length === 0) { emptyMessage.classList.remove('hidden'); } else {
+                emptyMessage.classList.add('hidden');
+                itensNoCarrinho.forEach(item => {
+                    const subtotal = parseFloat(item.preco) * item.quantidade;
+                    valorTotal += subtotal; totalItens += item.quantidade;
+                    cartItemsContainer.innerHTML += `<div class="flex justify-between items-center bg-stone-50 p-3 rounded-xl border border-stone-100"><div class="flex items-center gap-3"><img src="${item.imagem_url || 'https://via.placeholder.com/50'}" class="w-10 h-10 rounded-lg object-cover"><div><p class="text-sm font-bold text-stone-800">${item.nome}</p><p class="text-[10px] text-stone-500">R$ ${parseFloat(item.preco).toFixed(2).replace('.', ',')} / un.</p></div></div><div class="flex items-center gap-2"><button onclick="removerDoCarrinho(${item.id})" class="bg-stone-200 text-stone-700 w-6 h-6 rounded-full">-</button><span class="font-bold text-sm">${item.quantidade}</span><button onclick="adicionarAoCarrinho(${item.id})" class="bg-stone-200 text-stone-700 w-6 h-6 rounded-full">+</button></div><span class="font-bold text-sm">R$ ${subtotal.toFixed(2).replace('.', ',')}</span></div>`;
+                });
             }
+            cartCountElement.innerText = totalItens; cartCountElement.classList.toggle('hidden', totalItens === 0);
+            cartTotalElement.innerText = `R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
         }
 
-        // CONTROLE DE INTERFACE
-        function toggleCartModal(s) { document.getElementById('modalCart').classList.toggle('hidden', !s); }
-        function toggleLoginModal(s) { document.getElementById('modalLogin').classList.toggle('hidden', !s); }
+        function toggleCartModal(show) {
+            const modal = document.getElementById('modalCart');
+            if (show) { modal.classList.remove('hidden'); modal.classList.add('visible'); } else { modal.classList.add('hidden'); modal.classList.remove('visible'); }
+        }
+
+        function enviarPedidoWhatsapp() {
+            if (Object.keys(carrinho).length === 0) return alert("Carrinho vazio!");
+            let mensagem = "Olá, Any Gourmet! Gostaria de fazer o seguinte pedido:\n\n";
+            let valorTotal = 0;
+            Object.values(carrinho).forEach(item => {
+                const subtotal = parseFloat(item.preco) * item.quantidade;
+                valorTotal += subtotal;
+                mensagem += `- ${item.quantidade}x ${item.nome} - R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
+            });
+            mensagem += `\nTotal: R$ ${valorTotal.toFixed(2).replace('.', ',')}`;
+            const numeroWhatsapp = "55XXYYYYYYYYY"; // ALTERE PARA O SEU NÚMERO
+            window.open(`https://wa.me/${numeroWhatsapp}?text=${encodeURIComponent(mensagem)}`, '_blank');
+        }
+
+        function toggleLoginModal(show) {
+            const modal = document.getElementById('modalLogin');
+            if (show) { modal.classList.remove('hidden'); modal.classList.add('visible'); } else { modal.classList.add('hidden'); modal.classList.remove('visible'); }
+        }
+        function abrirLogin() { toggleLoginModal(true); }
 
         async function fazerLogin() {
-            const e = document.getElementById('userEmail').value;
-            const p = document.getElementById('userPass').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email: e, password: p });
-            
-            if (error) alert("Acesso Negado: Verifique e-mail e senha."); 
-            else { 
-                toggleLoginModal(false); 
-                document.body.classList.add('is-admin'); 
-                alert("Bem-vinda, Any!");
-            }
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPass').value;
+            const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) { alert("Erro no login: " + error.message); } else { document.body.classList.add('is-admin'); toggleLoginModal(false); alert("Bem-vindo, Admin!"); }
         }
 
-        window.onload = carregarDados;
+        async function logoutAdmin() { await _supabase.auth.signOut(); document.body.classList.remove('is-admin'); alert("Sessão encerrada."); }
+
+        async function checkAdminSession() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) document.body.classList.add('is-admin');
+        }
+
+        async function salvarDoce() {
+            const id = document.getElementById('doce-id').value;
+            const nome = document.getElementById('doce-nome').value;
+            const categoria = document.getElementById('doce-categoria').value;
+            const preco = document.getElementById('doce-preco').value;
+            const imagem_url = document.getElementById('doce-img').value;
+            if (!nome || !preco) return alert("Preencha nome e preço!");
+            const dados = { nome, categoria, preco: parseFloat(preco), imagem_url };
+            let res = id ? await _supabase.from('doces').update(dados).eq('id', id) : await _supabase.from('doces').insert([dados]);
+            if (res.error) alert("Erro ao salvar: " + res.error.message); else { alert("Sucesso!"); limparFormulario(); carregarDados(); }
+        }
+
+        async function excluirDoce(id) {
+            if (!confirm("Deseja excluir este item?")) return;
+            const { error } = await _supabase.from('doces').delete().eq('id', id);
+            if (error) alert("Erro ao excluir"); else carregarDados();
+        }
+
+        function editarDoce(id) {
+            const doce = produtos.find(p => p.id === id);
+            document.getElementById('doce-id').value = doce.id;
+            document.getElementById('doce-nome').value = doce.nome;
+            document.getElementById('doce-categoria').value = doce.categoria;
+            document.getElementById('doce-preco').value = doce.preco;
+            document.getElementById('doce-img').value = doce.imagem_url;
+            document.getElementById('form-title').innerText = "Editar Sabor";
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function limparFormulario() {
+            document.getElementById('doce-id').value = ''; document.getElementById('doce-nome').value = '';
+            document.getElementById('doce-categoria').value = ''; document.getElementById('doce-preco').value = '';
+            document.getElementById('doce-img').value = ''; document.getElementById('form-title').innerText = "Cadastrar Novo Sabor";
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
     </script>
 </body>
-</html>
+    </html>
+
