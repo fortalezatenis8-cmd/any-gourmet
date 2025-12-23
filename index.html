@@ -3,104 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Teste de Conexão</title>
+    <title>Any Gourmet | Catálogo Exclusivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; background-color: #fafaf9; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .admin-section { display: none; }
+        body.is-admin .admin-section { display: block; }
+        body.is-admin .customer-section { display: none; }
+    </style>
 </head>
-<body class="bg-slate-50 p-6">
+<body class="text-stone-800 pb-20">
 
-    <div class="max-w-md mx-auto bg-white p-8 rounded-3xl shadow-lg border border-slate-100">
-        <h1 class="text-xl font-bold mb-4 text-slate-800">Any Gourmet - Diagnóstico</h1>
-        
-        <div id="status-box" class="p-4 rounded-xl mb-4 bg-orange-50 text-orange-700 text-sm border border-orange-100">
-            ⏳ Verificando configurações...
+    <header class="py-10 bg-white text-center border-b border-stone-100 shadow-sm">
+        <h1 class="text-3xl font-serif tracking-widest uppercase text-stone-900">Any Gourmet</h1>
+        <p id="status-conexao" class="text-[9px] uppercase tracking-[0.3em] mt-2 text-stone-400">Conectando ao catálogo...</p>
+    </header>
+
+    <main id="vitrine" class="customer-section max-w-4xl mx-auto px-6 py-10">
+        <div id="loading-area" class="text-center py-20">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-900 mx-auto mb-4"></div>
+            <p class="text-[10px] uppercase tracking-widest text-stone-400 font-bold">Buscando doçuras...</p>
+        </div>
+    </main>
+
+    <main class="admin-section max-w-4xl mx-auto px-6 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-xl font-serif italic font-bold">Gerenciar Sabores</h2>
+            <button onclick="location.reload()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full uppercase font-bold tracking-widest">Sair</button>
         </div>
 
-        <div id="debug-log" class="text-[10px] font-mono bg-slate-900 text-green-400 p-4 rounded-lg overflow-x-auto mb-6 h-32">
-            > Iniciando log de sistema...<br>
-        </div>
-
-        <button onclick="abrirLogin()" class="w-full bg-slate-800 text-white p-4 rounded-2xl font-bold text-sm mb-4">
-            Testar Painel Administrativo
-        </button>
-
-        <div id="area-dados" class="space-y-2">
+        <section class="bg-white p-8 rounded-[2rem] shadow-sm border border-stone-100 mb-10">
+            <h3 class="text-[10px] uppercase font-bold mb-6 text-stone-400 tracking-[0.2em]">Novo Item no Catálogo</h3>
+            <div class="space-y-4">
+                <input type="text" id="new-nome" placeholder="Nome do Doce (ex: Ninho com Nutella)" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent focus:border-stone-200 transition-all">
+                <select id="new-categoria" class="w-full p-4 bg-stone-50 rounded-2xl border border-transparent outline-none">
+                    <option value="Tradicional">Tradicional</option>
+                    <option value="Especial">Especial</option>
+                    <option value="Premium">Premium</option>
+                </select>
+                <input type="text" id="new-img" placeholder="Link da Imagem (URL)" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent">
+                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-2xl font-bold uppercase text-xs tracking-[0.3em] shadow-xl active:scale-95 transition-transform">Cadastrar Doce</button>
             </div>
-    </div>
+        </section>
 
-    <div id="modalLogin" class="fixed inset-0 bg-black/60 hidden flex items-center justify-center p-6 z-50">
-        <div class="bg-white p-6 rounded-3xl w-full max-w-xs">
-            <h2 class="font-bold mb-4">Login</h2>
-            <input type="email" id="email" placeholder="E-mail" class="w-full p-3 border rounded-xl mb-2 outline-none">
-            <input type="password" id="pass" placeholder="Senha" class="w-full p-3 border rounded-xl mb-4 outline-none">
-            <button onclick="executarLogin()" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold">Entrar</button>
-            <button onclick="fecharLogin()" class="w-full text-xs text-slate-400 mt-4 uppercase">Voltar</button>
+        <div id="admin-list" class="space-y-3">
+            </div>
+    </main>
+
+    <footer class="fixed bottom-0 left-0 right-0 p-5 bg-white/80 backdrop-blur-md border-t border-stone-100 text-center z-40">
+        <button onclick="abrirLogin()" id="btn-adm" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400">
+            Acesso Restrito
+        </button>
+    </footer>
+
+    <div id="modalLogin" class="fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+            <h2 class="text-2xl font-serif mb-6 text-center italic">Identifique-se</h2>
+            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 outline-none border focus:border-stone-200">
+            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 outline-none border focus:border-stone-200">
+            <button onclick="login()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg">Entrar</button>
+            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-6 uppercase tracking-widest font-bold">Cancelar</button>
         </div>
     </div>
 
     <script>
-        // Limpeza automática de espaços em branco nas chaves
-        const URL_PROJETO = 'https://apsbsqmtjisrnvfmxqbh.supabase.co'.trim();
-        const KEY_PROJETO = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g'.trim();
+        // URL CORRIGIDA CONFORME ENVIADO
+        const URL_SUPA = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
+        const KEY_SUPA = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
 
-        const log = document.getElementById('debug-log');
-        const statusBox = document.getElementById('status-box');
+        const _supabase = supabase.createClient(URL_SUPA, KEY_SUPA);
 
-        function addLog(msg) {
-            log.innerHTML += `> ${msg}<br>`;
-            log.scrollTop = log.scrollHeight;
-        }
-
-        // Tentar criar o cliente Supabase
-        let _supabase;
-        try {
-            _supabase = supabase.createClient(URL_PROJETO, KEY_PROJETO);
-            addLog("Cliente Supabase criado.");
-        } catch (e) {
-            addLog("ERRO AO CRIAR CLIENTE: " + e.message);
-        }
-
-        async function conectar() {
-            addLog("Tentando ler tabela 'Doces'...");
+        async function inicializar() {
             try {
+                // Busca na tabela 'Doces' (Maiúsculo conforme suas fotos)
                 const { data, error } = await _supabase.from('Doces').select('*');
-
+                
                 if (error) {
-                    addLog("ERRO DO BANCO: " + error.message);
-                    statusBox.className = "p-4 rounded-xl mb-4 bg-red-50 text-red-700 border border-red-100 text-sm";
-                    statusBox.innerHTML = `❌ Falha: ${error.message}`;
+                    document.getElementById('status-conexao').innerText = "Erro de Sincronização";
+                    document.getElementById('loading-area').innerHTML = `<p class='text-[10px] text-stone-400'>Nenhum dado encontrado.</p>`;
                 } else {
-                    addLog("SUCESSO: " + data.length + " itens encontrados.");
-                    statusBox.className = "p-4 rounded-xl mb-4 bg-green-50 text-green-700 border border-green-100 text-sm";
-                    statusBox.innerHTML = "✅ Conectado com sucesso!";
-                    mostrarDoces(data);
+                    document.getElementById('status-conexao').innerText = "Catálogo Online";
+                    document.getElementById('status-conexao').classList.replace('text-stone-400', 'text-green-500');
+                    renderizarVitrine(data);
+                    renderizarListaAdmin(data);
                 }
             } catch (e) {
-                addLog("ERRO DE CONEXÃO: " + e.message);
+                document.getElementById('status-conexao').innerText = "Falha na Rede";
             }
-        }
-
-        function mostrarDoces(lista) {
-            const div = document.getElementById('area-dados');
-            if(lista.length === 0) div.innerHTML = "<p class='text-xs text-slate-400'>Tabela vazia.</p>";
-            div.innerHTML = lista.map(d => `<div class='p-3 bg-slate-100 rounded-lg text-xs font-bold'>${d.nome}</div>`).join('');
         }
 
         function abrirLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
         function fecharLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
 
-        async function executarLogin() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            addLog("Tentando login para: " + e);
+        async function login() {
+            const e = document.getElementById('userEmail').value;
+            const p = document.getElementById('userPass').value;
             const { error } = await _supabase.auth.signInWithPassword({ email: e, password: p });
-            if(error) alert("Erro: " + error.message);
-            else { alert("Sucesso!"); fecharLogin(); }
+            if (error) alert("Acesso negado.");
+            else {
+                fecharLogin();
+                document.body.classList.add('is-admin');
+                document.getElementById('btn-adm').innerText = "Painel Administrativo Ativo";
+            }
         }
 
-        // Iniciar conexão
-        conectar();
+        async function salvarDoce() {
+            const nome = document.getElementById('new-nome').value;
+            const categoria = document.getElementById('new-categoria').value;
+            const imagem_url = document.getElementById('new-img').value;
+            if(!nome) return alert("Digite o nome do doce.");
+            
+            const { error } = await _supabase.from('Doces').insert([{ nome, categoria, imagem_url }]);
+            if(error) alert("Erro: " + error.message);
+            else { alert("Sucesso!"); location.reload(); }
+        }
+
+        async function excluirDoce(id) {
+            if(!confirm("Excluir este sabor?")) return;
+            await _supabase.from('Doces').delete().eq('id', id);
+            location.reload();
+        }
+
+        function renderizarVitrine(doces) {
+            const container = document.getElementById('vitrine');
+            if(!doces || doces.length === 0) {
+                container.innerHTML = "<p class='text-center text-stone-400 text-[10px] py-20 uppercase tracking-[0.2em]'>Seu catálogo está vazio.<br>Faça login para cadastrar sabores.</p>";
+                return;
+            }
+            container.innerHTML = doces.map(d => `
+                <div class="bg-white p-5 rounded-[2rem] border border-stone-50 mb-4 flex items-center gap-5 shadow-sm">
+                    <img src="${d.imagem_url || 'https://via.placeholder.com/150'}" class="w-20 h-20 rounded-[1.5rem] object-cover bg-stone-50">
+                    <div>
+                        <h3 class="font-bold text-sm uppercase tracking-tight text-stone-900">${d.nome}</h3>
+                        <p class="text-[9px] text-stone-400 uppercase tracking-widest mt-1">${d.categoria}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarListaAdmin(doces) {
+            const container = document.getElementById('admin-list');
+            if(!doces) return;
+            container.innerHTML = '<h3 class="text-[10px] uppercase font-bold text-stone-300 mb-4 tracking-widest">Lista de Sabores Atuais</h3>';
+            container.innerHTML += doces.map(d => `
+                <div class="flex justify-between items-center p-4 bg-white border border-stone-100 rounded-2xl mb-2">
+                    <span class="text-xs font-bold text-stone-600">${d.nome}</span>
+                    <button onclick="excluirDoce(${d.id})" class="text-[9px] text-red-400 font-bold uppercase tracking-widest bg-red-50 px-3 py-2 rounded-xl">Remover</button>
+                </div>
+            `).join('');
+        }
+
+        inicializar();
     </script>
 </body>
-</html>
+    </html>
 
