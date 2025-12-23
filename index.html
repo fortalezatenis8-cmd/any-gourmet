@@ -16,50 +16,69 @@
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .card-doce { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card-doce:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05); }
-        .bg-blur { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.8); }
     </style>
 </head>
 <body class="text-stone-800">
 
-    <header class="py-16 bg-white shadow-sm text-center border-b border-stone-100 relative overflow-hidden">
-        <div class="relative z-10">
-            <h1 class="text-5xl font-serif tracking-[0.3em] uppercase text-stone-900 mb-2">Any Gourmet</h1>
-            <div class="w-24 h-px bg-stone-300 mx-auto my-4"></div>
-            <p class="text-stone-400 text-xs uppercase tracking-[0.5em] font-light italic">Doceria Artesanal Personalizada</p>
-        </div>
+    <header class="py-16 bg-white shadow-sm text-center border-b border-stone-100">
+        <h1 class="text-5xl font-serif tracking-[0.3em] uppercase text-stone-900 mb-2">Any Gourmet</h1>
+        <div class="w-24 h-px bg-stone-300 mx-auto my-4"></div>
+        <p class="text-stone-400 text-xs uppercase tracking-[0.5em] font-light italic">Doceria Artesanal Personalizada</p>
     </header>
 
     <main id="vitrine" class="max-w-6xl mx-auto px-6 py-16 pb-40">
-        <div class="flex flex-col items-center justify-center py-20 text-stone-300">
+        <div id="loading-state" class="flex flex-col items-center justify-center py-20 text-stone-300">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-800 mb-4"></div>
             <p class="uppercase tracking-widest text-[10px]">Preparando Experiência...</p>
         </div>
     </main>
 
-    <div id="resumo-simulacao" class="hidden fixed bottom-8 right-8 left-8 md:left-auto md:w-[400px] bg-white/95 backdrop-blur-xl shadow-2xl rounded-[2rem] p-8 border border-white z-50 max-h-[80vh] overflow-y-auto ring-1 ring-black/5">
-        </div>
+    <div id="resumo-simulacao" class="hidden fixed bottom-8 right-8 left-8 md:left-auto md:w-[400px] bg-white/95 backdrop-blur-xl shadow-2xl rounded-[2rem] p-8 border border-white z-50 max-h-[80vh] overflow-y-auto"></div>
 
-    <div id="modalLogin" class="fixed inset-0 bg-stone-900/40 hidden flex items-center justify-center p-6 z-[60] backdrop-blur-md">
-        <div class="bg-white p-10 rounded-[2.5rem] w-full max-w-sm shadow-2xl border border-stone-100">
-            <h2 class="text-2xl font-serif mb-6 text-center text-stone-900 italic">Área do Desenvolvedor</h2>
-            <div class="space-y-4">
-                <input type="text" id="user" placeholder="Usuário" class="w-full p-4 bg-stone-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-stone-200 outline-none transition-all">
-                <input type="password" id="pass" placeholder="Senha" class="w-full p-4 bg-stone-50 border-none rounded-2xl text-sm focus:ring-2 focus:ring-stone-200 outline-none transition-all">
-                <button onclick="login()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold hover:bg-stone-800 transition-all shadow-lg shadow-stone-200">Entrar no Painel</button>
-                <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] uppercase tracking-widest mt-2">Voltar ao Site</button>
-            </div>
-        </div>
-    </div>
+    <script>
+        // CONFIGURAÇÕES SUPABASE ATUALIZADAS
+        const URL = 'https://apsbsqmtjisrnvfmxqbh.supabase.co';
+        const KEY = 'Sb_publishable_xI1bty0HpXLFN0v3GLpGQg_Bn87nSYJ';
 
-    <footer class="py-20 text-center border-t border-stone-100">
-        <button onclick="abrirLogin()" class="group">
-            <span class="text-[9px] uppercase tracking-[0.4em] text-stone-300 group-hover:text-stone-600 transition-all">Acesso Administrativo</span>
-        </button>
-    </footer>
-        <script>
+        const _supabase = supabase.createClient(URL, KEY);
+
         let dbDoces = [];
         let dbPrecos = [];
         let simulacao = [];
+
+        async function inicializar() {
+            try {
+                // Busca dados das tabelas
+                const { data: p, error: ep } = await _supabase.from('Precos').select('*');
+                const { data: d, error: ed } = await _supabase.from('Doces').select('*');
+                
+                if (ep) {
+                    alert("Erro na tabela Precos: " + ep.message);
+                    console.error(ep);
+                }
+                if (ed) {
+                    alert("Erro na tabela Doces: " + ed.message);
+                    console.error(ed);
+                }
+
+                if (ep || ed) throw new Error("Falha na conexão com o banco.");
+
+                dbPrecos = p || [];
+                dbDoces = d || [];
+
+                if (dbDoces.length === 0) {
+                    document.getElementById('vitrine').innerHTML = '<p class="text-center text-stone-400 uppercase text-[10px] tracking-widest">Nenhum produto encontrado no catálogo.</p>';
+                } else {
+                    renderizarVitrine();
+                }
+            } catch (err) {
+                document.getElementById('vitrine').innerHTML = `
+                    <div class="text-center py-20">
+                        <p class="text-red-400 uppercase text-[10px] tracking-widest">Erro ao carregar catálogo</p>
+                        <p class="text-[9px] text-stone-400 mt-2">${err.message}</p>
+                    </div>`;
+            }
+        }
 
         function renderizarVitrine() {
             const vitrine = document.getElementById('vitrine');
@@ -67,7 +86,7 @@
             const categorias = ['Tradicional', 'Especial', 'Premium'];
 
             categorias.forEach(catNome => {
-                const docesDaCat = dbDoces.filter(d => d.categoria.toLowerCase() === catNome.toLowerCase());
+                const docesDaCat = dbDoces.filter(d => d.categoria && d.categoria.toLowerCase() === catNome.toLowerCase());
                 if(docesDaCat.length === 0) return;
 
                 let html = `<section class="mb-24">
@@ -80,23 +99,20 @@
 
                 docesDaCat.forEach(doce => {
                     html += `
-                        <div class="bg-white p-5 rounded-[2rem] border border-stone-100 flex flex-col card-doce relative">
-                            <div class="relative overflow-hidden rounded-[1.5rem] mb-6 aspect-square shadow-md">
-                                <img src="${doce.imagem_url}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <div class="bg-white p-5 rounded-[2rem] border border-stone-100 flex flex-col card-doce shadow-sm">
+                            <div class="relative overflow-hidden rounded-[1.5rem] mb-6 aspect-square bg-stone-50">
+                                <img src="${doce.imagem_url}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400?text=Doce'">
                             </div>
                             <h3 class="font-bold text-sm uppercase text-stone-900 tracking-tight text-center mb-2 px-2">${doce.nome}</h3>
                             <p class="text-[11px] text-stone-400 italic mb-6 text-center px-4 leading-relaxed">${doce.descricao}</p>
                             
                             <div class="mt-auto space-y-3">
-                                <div class="flex items-center justify-between bg-stone-50 rounded-2xl p-2 border border-stone-100">
-                                    <button onclick="ajustarQtd(${doce.id}, -1)" class="w-10 h-10 flex items-center justify-center text-stone-400 hover:text-stone-900 text-xl font-light">-</button>
-                                    <div class="text-center">
-                                        <input type="number" id="qtd-${doce.id}" value="5" min="5" class="w-12 bg-transparent text-center text-sm font-bold outline-none text-stone-800">
-                                        <p class="text-[8px] uppercase text-stone-300 tracking-tighter">Unidades</p>
-                                    </div>
-                                    <button onclick="ajustarQtd(${doce.id}, 1)" class="w-10 h-10 flex items-center justify-center text-stone-400 hover:text-stone-900 text-xl font-light">+</button>
+                                <div class="flex items-center justify-between bg-stone-50 rounded-2xl p-2">
+                                    <button onclick="ajustarQtd(${doce.id}, -1)" class="w-10 h-10 flex items-center justify-center text-stone-400 text-xl">-</button>
+                                    <input type="number" id="qtd-${doce.id}" value="5" min="5" class="w-12 bg-transparent text-center text-sm font-bold outline-none text-stone-800">
+                                    <button onclick="ajustarQtd(${doce.id}, 1)" class="w-10 h-10 flex items-center justify-center text-stone-400 text-xl">+</button>
                                 </div>
-                                <button onclick="adicionarAoOrcamento(${doce.id})" class="w-full bg-stone-900 text-white text-[10px] py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-stone-800 transition-all shadow-lg shadow-stone-100">
+                                <button onclick="adicionarAoOrcamento(${doce.id})" class="w-full bg-stone-900 text-white text-[10px] py-4 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-stone-800 transition-all">
                                     Simular Orçamento
                                 </button>
                             </div>
@@ -141,78 +157,30 @@
             painel.classList.remove('hidden');
             let totalPedido = 0;
             let html = `<div class="flex justify-between items-center mb-8">
-                <div>
-                    <h3 class="font-black text-xs uppercase tracking-[0.2em] text-stone-900">Meu Pedido</h3>
-                    <p class="text-[9px] text-stone-400 uppercase tracking-widest mt-1">Simulação em Tempo Real</p>
-                </div>
-                <button onclick="this.parentElement.parentElement.classList.add('hidden')" class="w-8 h-8 flex items-center justify-center bg-stone-50 rounded-full text-stone-400 hover:text-stone-900">&times;</button>
+                <h3 class="font-black text-xs uppercase tracking-[0.2em] text-stone-900">Meu Pedido</h3>
+                <button onclick="document.getElementById('resumo-simulacao').classList.add('hidden')" class="text-stone-400">&times;</button>
             </div>`;
             
             simulacao.forEach((item, idx) => {
                 totalPedido += item.total;
-                html += `<div class="group flex justify-between items-center mb-6 animate-in slide-in-from-right duration-300">
-                    <div>
-                        <p class="font-bold text-xs uppercase text-stone-800 tracking-tight">${item.nome}</p>
-                        <p class="text-[10px] text-stone-400">${item.qtd} unidades <span class="mx-1">•</span> R$ ${item.unit.toFixed(2)}/un</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-bold text-sm text-stone-900">R$ ${item.total.toFixed(2)}</p>
-                        <button onclick="remover(${idx})" class="text-[8px] text-red-400 uppercase font-bold tracking-tighter hover:text-red-600 transition-colors">Remover</button>
-                    </div>
+                html += `<div class="flex justify-between items-center mb-4">
+                    <div class="text-xs uppercase font-bold text-stone-800">${item.nome} (${item.qtd}x)</div>
+                    <div class="text-xs font-bold">R$ ${item.total.toFixed(2)}</div>
                 </div>`;
             });
 
-            html += `<div class="mt-8 pt-6 border-t border-stone-100">
-                <div class="flex justify-between items-center mb-8">
-                    <span class="font-bold text-[10px] text-stone-400 uppercase tracking-[0.2em]">Investimento Total:</span>
-                    <span class="font-black text-3xl text-stone-900 italic">R$ ${totalPedido.toFixed(2)}</span>
-                </div>
-                <button onclick="enviarWhats(${totalPedido})" class="w-full bg-green-500 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-green-100 hover:bg-green-600 transition-all transform hover:scale-[1.02] active:scale-95">
-                    Finalizar via WhatsApp
-                </button>
+            html += `<div class="mt-6 pt-4 border-t border-stone-100 flex justify-between items-center">
+                <span class="text-3xl font-serif italic font-bold">R$ ${totalPedido.toFixed(2)}</span>
+                <button onclick="enviarWhats(${totalPedido})" class="bg-green-500 text-white px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest">WhatsApp</button>
             </div>`;
             painel.innerHTML = html;
         }
 
-        function remover(i) { simulacao.splice(i, 1); atualizarPainel(); }
-
         function enviarWhats(total) {
-            let msg = "*ANY GOURMET - SOLICITAÇÃO DE ORÇAMENTO*\n\n";
-            simulacao.forEach(i => { msg += `✅ *${i.qtd}x ${i.nome}*\n   (Valor Unit: R$ ${i.unit.toFixed(2)} | Subtotal: R$ ${i.total.toFixed(2)})\n\n`; });
-            msg += `*VALOR TOTAL ESTIMADO: R$ ${total.toFixed(2)}*\n\n_Aguardo o seu retorno para prosseguirmos com a encomenda!_`;
+            let msg = "*ANY GOURMET - ORÇAMENTO*\n\n";
+            simulacao.forEach(i => { msg += `✅ *${i.qtd}x ${i.nome}* - R$ ${i.total.toFixed(2)}\n`; });
+            msg += `\n*TOTAL: R$ ${total.toFixed(2)}*`;
             window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-                            // CONFIGURAÇÕES SUPABASE
-        const URL = 'https://apsbsqmtjisrnvfmxqbh.supabase.co';
-        const KEY = 'Sb_publishable_xI1bty0HpXLFN0v3GLpGQg_Bn87nSYJ';
-
-        const _supabase = supabase.createClient(URL, KEY);
-
-        async function inicializar() {
-            try {
-                const { data: p, error: ep } = await _supabase.from('Precos').select('*');
-                const { data: d, error: ed } = await _supabase.from('Doces').select('*');
-                
-                if (ep || ed) throw new Error("Erro ao carregar dados");
-                
-                dbPrecos = p || [];
-                dbDoces = d || [];
-                renderizarVitrine();
-            } catch (err) {
-                document.getElementById('vitrine').innerHTML = '<p class="text-center text-red-300 py-20 uppercase text-[10px] tracking-widest">Erro de conexão com o catálogo.</p>';
-            }
-        }
-
-        function abrirLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
-        function fecharLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
-        
-        async function login() {
-            const { error } = await _supabase.auth.signInWithPassword({ 
-                email: document.getElementById('user').value, 
-                password: document.getElementById('pass').value 
-            });
-            if(error) alert("Acesso Negado!");
-            else { alert("Acesso Autorizado! Bem-vindo(a)."); document.body.classList.add('logged-in'); fecharLogin(); }
         }
 
         inicializar();
