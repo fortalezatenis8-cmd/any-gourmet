@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Gestão & Vitrine</title>
+    <title>Any Gourmet | Catálogo & Gestão</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
 
     <header class="py-10 bg-white text-center border-b border-stone-100">
         <h1 class="text-3xl font-serif tracking-widest uppercase text-stone-900">Any Gourmet</h1>
-        <p id="status-conexao" class="text-[9px] uppercase tracking-widest mt-2 text-orange-400">Verificando banco de dados...</p>
+        <p id="status-conexao" class="text-[9px] uppercase tracking-widest mt-2 text-orange-400 font-bold">Iniciando sistema...</p>
     </header>
 
     <main id="vitrine" class="customer-section max-w-4xl mx-auto px-6 py-10 pb-32">
@@ -30,23 +30,23 @@
         </div>
     </main>
 
-    <main class="admin-section max-w-4xl mx-auto px-6 py-10">
+    <main class="admin-section max-w-4xl mx-auto px-6 py-10 pb-32">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-xl font-serif italic">Painel de Gestão</h2>
-            <button onclick="location.reload()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full uppercase font-bold">Sair</button>
+            <button onclick="location.reload()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full uppercase font-bold">Sair do Painel</button>
         </div>
 
         <section class="bg-white p-6 rounded-3xl shadow-sm border border-stone-100 mb-8">
-            <h3 class="text-[10px] uppercase font-bold mb-4 text-stone-400 tracking-widest">Cadastrar Sabor</h3>
+            <h3 class="text-[10px] uppercase font-bold mb-4 text-stone-400 tracking-widest">Cadastrar Novo Sabor</h3>
             <div class="space-y-3">
-                <input type="text" id="new-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent focus:border-stone-200">
+                <input type="text" id="new-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent">
                 <select id="new-categoria" class="w-full p-4 bg-stone-50 rounded-2xl border border-transparent outline-none">
                     <option value="Tradicional">Tradicional</option>
                     <option value="Especial">Especial</option>
                     <option value="Premium">Premium</option>
                 </select>
-                <input type="text" id="new-img" placeholder="Link da Imagem (URL)" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent focus:border-stone-200">
-                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg">Salvar no Catálogo</button>
+                <input type="text" id="new-img" placeholder="Link da Imagem (URL)" class="w-full p-4 bg-stone-50 rounded-2xl outline-none border border-transparent">
+                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest shadow-lg">Salvar no Supabase</button>
             </div>
         </section>
 
@@ -62,38 +62,42 @@
 
     <div id="modalLogin" class="fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
         <div class="bg-white p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-serif mb-6 text-center italic">Identifique-se</h2>
-            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 outline-none border focus:border-stone-200">
-            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 outline-none border focus:border-stone-200">
-            <button onclick="login()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest">Entrar</button>
-            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-6 uppercase tracking-widest">Fechar</button>
+            <h2 class="text-2xl font-serif mb-6 text-center italic">Área Restrita</h2>
+            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 outline-none border">
+            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 outline-none border">
+            <button onclick="login()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest">Entrar no Painel</button>
+            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-6 uppercase tracking-widest">Voltar</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES SUPABASE
+        // CONFIGURAÇÕES DO SUPABASE
         const URL = 'https://apsbsqmtjisrnvfmxqbh.supabase.co';
         const KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
         
         const _supabase = supabase.createClient(URL, KEY);
 
+        let dbDoces = [];
+
         async function inicializar() {
             try {
-                // Tenta carregar os dados
-                const { data, error } = await _supabase.from('doces').select('*');
+                // Buscando dados com nomes EXATOS conforme seus prints
+                const { data, error } = await _supabase.from('Doces').select('*');
                 
                 if (error) {
-                    document.getElementById('status-conexao').innerText = "Modo Offline / Erro de Tabela";
-                    document.getElementById('status-conexao').classList.replace('text-orange-400', 'text-red-400');
-                    document.getElementById('loading-area').innerHTML = "<p class='text-xs text-stone-400'>Nenhum dado encontrado. Entre na ADM para cadastrar.</p>";
+                    console.error("Erro Supabase:", error);
+                    document.getElementById('status-conexao').innerText = "Erro: " + error.message;
+                    document.getElementById('status-conexao').style.color = "red";
+                    document.getElementById('loading-area').innerHTML = `<p class='text-xs text-stone-400 uppercase'>Erro ao carregar tabela 'Doces'.<br>Verifique se salvou a Policy no Supabase.</p>`;
                 } else {
-                    document.getElementById('status-conexao').innerText = "Conectado ao Catálogo";
-                    document.getElementById('status-conexao').classList.replace('text-orange-400', 'text-green-500');
-                    renderizarVitrine(data);
-                    renderizarListaAdmin(data);
+                    document.getElementById('status-conexao').innerText = "Conexão Estabelecida!";
+                    document.getElementById('status-conexao').style.color = "green";
+                    dbDoces = data || [];
+                    renderizarVitrine(dbDoces);
+                    renderizarListaAdmin(dbDoces);
                 }
             } catch (e) {
-                document.getElementById('status-conexao').innerText = "Erro de Rede";
+                document.getElementById('status-conexao').innerText = "Falha Crítica de Rede";
             }
         }
 
@@ -104,55 +108,58 @@
         async function login() {
             const email = document.getElementById('userEmail').value;
             const pass = document.getElementById('userPass').value;
-            
             const { data, error } = await _supabase.auth.signInWithPassword({ email, password: pass });
-            
             if (error) {
-                alert("Erro: " + error.message);
+                alert("Erro de Login: " + error.message);
             } else {
                 fecharLogin();
                 document.body.classList.add('is-admin');
-                document.getElementById('btn-adm-trigger').innerText = "✨ Logado como Administradora";
-                alert("Bem-vinda, Any!");
+                document.getElementById('btn-adm-trigger').innerText = "✨ Modo Edição Ativado";
+                alert("Login realizado com sucesso!");
             }
         }
 
-        // --- GESTÃO DE DOCES ---
+        // --- GESTÃO DE DOCES (ADMIN) ---
         async function salvarDoce() {
             const nome = document.getElementById('new-nome').value;
             const categoria = document.getElementById('new-categoria').value;
             const imagem_url = document.getElementById('new-img').value;
 
-            if(!nome) return alert("Por favor, digite o nome do doce.");
+            if(!nome) return alert("O nome é obrigatório!");
             
-            const { error } = await _supabase.from('doces').insert([{ nome, categoria, imagem_url }]);
+            // Inserindo na tabela 'Doces' (com D maiúsculo)
+            const { error } = await _supabase.from('Doces').insert([{ nome, categoria, imagem_url }]);
             
-            if(error) alert("Erro ao salvar: " + error.message);
-            else {
-                alert("Doce cadastrado com sucesso!");
+            if(error) {
+                alert("Erro ao salvar: " + error.message);
+            } else {
+                alert("Doce adicionado ao catálogo!");
                 location.reload();
             }
         }
 
         async function excluirDoce(id) {
-            if(!confirm("Remover este doce?")) return;
-            await _supabase.from('doces').delete().eq('id', id);
-            location.reload();
+            if(!confirm("Deseja realmente excluir este doce?")) return;
+            const { error } = await _supabase.from('Doces').delete().eq('id', id);
+            if(error) alert("Erro ao excluir: " + error.message);
+            else location.reload();
         }
 
         // --- RENDERIZAÇÃO ---
         function renderizarVitrine(doces) {
             const container = document.getElementById('vitrine');
-            if(!doces || doces.length === 0) {
-                container.innerHTML = "<p class='text-center text-stone-400 text-xs py-20'>Catálogo vazio.</p>";
+            if(doces.length === 0) {
+                container.innerHTML = "<p class='text-center text-stone-400 text-xs py-20 uppercase tracking-widest'>Catálogo vazio.<br>Acesse o painel para cadastrar.</p>";
                 return;
             }
             container.innerHTML = doces.map(d => `
-                <div class="bg-white p-4 rounded-3xl border border-stone-100 mb-4 flex items-center gap-4 shadow-sm">
-                    <img src="${d.imagem_url || 'https://via.placeholder.com/80'}" class="w-16 h-16 rounded-2xl object-cover bg-stone-50">
+                <div class="bg-white p-5 rounded-3xl border border-stone-100 mb-4 flex items-center gap-5 shadow-sm">
+                    <div class="w-20 h-20 bg-stone-50 rounded-2xl overflow-hidden shadow-inner">
+                        <img src="${d.imagem_url || 'https://via.placeholder.com/150?text=Doce'}" class="w-full h-full object-cover">
+                    </div>
                     <div>
-                        <h3 class="font-bold text-sm uppercase">${d.nome}</h3>
-                        <p class="text-[10px] text-stone-400 uppercase tracking-widest">${d.categoria}</p>
+                        <h3 class="font-bold text-sm uppercase tracking-tight text-stone-900">${d.nome}</h3>
+                        <p class="text-[9px] text-stone-400 uppercase tracking-widest mt-1">${d.categoria}</p>
                     </div>
                 </div>
             `).join('');
@@ -161,15 +168,16 @@
         function renderizarListaAdmin(doces) {
             const container = document.getElementById('admin-list');
             if(!doces) return;
-            container.innerHTML = doces.map(d => `
-                <div class="flex justify-between items-center p-4 bg-white border border-stone-100 rounded-2xl">
-                    <span class="text-xs font-bold">${d.nome}</span>
-                    <button onclick="excluirDoce(${d.id})" class="text-[10px] text-red-500 font-bold uppercase">Excluir</button>
+            container.innerHTML = '<h3 class="text-[10px] uppercase font-bold text-stone-300 mb-4 tracking-widest">Itens no Catálogo</h3>';
+            container.innerHTML += doces.map(d => `
+                <div class="flex justify-between items-center p-4 bg-white border border-stone-100 rounded-2xl mb-2">
+                    <span class="text-xs font-bold text-stone-700">${d.nome}</span>
+                    <button onclick="excluirDoce(${d.id})" class="text-[9px] text-red-400 font-bold uppercase tracking-widest px-3 py-2 bg-red-50 rounded-lg">Excluir</button>
                 </div>
             `).join('');
         }
 
-        // Inicializa o script
+        // Inicializa o sistema
         inicializar();
     </script>
 </body>
