@@ -11,9 +11,6 @@
         :root { --stone-900: #1c1917; }
         body { font-family: 'Montserrat', sans-serif; background-color: #fafaf9; }
         .font-serif { font-family: 'Playfair Display', serif; }
-        .admin-only { display: none; }
-        body.logged-in .admin-only { display: block; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         .card-doce { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .card-doce:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.05); }
     </style>
@@ -27,18 +24,17 @@
     </header>
 
     <main id="vitrine" class="max-w-6xl mx-auto px-6 py-16 pb-40">
-        <div id="loading-state" class="flex flex-col items-center justify-center py-20 text-stone-300">
+        <div id="loading-area" class="flex flex-col items-center justify-center py-20 text-stone-300">
             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-800 mb-4"></div>
-            <p class="uppercase tracking-widest text-[10px]">Preparando Experiência...</p>
+            <p class="uppercase tracking-widest text-[10px]">Conectando ao Catálogo...</p>
         </div>
     </main>
 
     <div id="resumo-simulacao" class="hidden fixed bottom-8 right-8 left-8 md:left-auto md:w-[400px] bg-white/95 backdrop-blur-xl shadow-2xl rounded-[2rem] p-8 border border-white z-50 max-h-[80vh] overflow-y-auto"></div>
 
     <script>
-        // CONFIGURAÇÕES SUPABASE ATUALIZADAS
         const URL = 'https://apsbsqmtjisrnvfmxqbh.supabase.co';
-        const KEY = 'Sb_publishable_xI1bty0HpXLFN0v3GLpGQg_Bn87nSYJ';
+        const KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
 
         const _supabase = supabase.createClient(URL, KEY);
 
@@ -48,34 +44,25 @@
 
         async function inicializar() {
             try {
-                // Busca dados das tabelas
-                const { data: p, error: ep } = await _supabase.from('Precos').select('*');
                 const { data: d, error: ed } = await _supabase.from('Doces').select('*');
+                const { data: p, error: ep } = await _supabase.from('Precos').select('*');
                 
-                if (ep) {
-                    alert("Erro na tabela Precos: " + ep.message);
-                    console.error(ep);
-                }
-                if (ed) {
-                    alert("Erro na tabela Doces: " + ed.message);
-                    console.error(ed);
-                }
+                if (ed || ep) throw new Error(ed?.message || ep?.message);
 
-                if (ep || ed) throw new Error("Falha na conexão com o banco.");
-
-                dbPrecos = p || [];
                 dbDoces = d || [];
+                dbPrecos = p || [];
 
                 if (dbDoces.length === 0) {
-                    document.getElementById('vitrine').innerHTML = '<p class="text-center text-stone-400 uppercase text-[10px] tracking-widest">Nenhum produto encontrado no catálogo.</p>';
+                    document.getElementById('vitrine').innerHTML = '<p class="text-center py-20 uppercase text-[10px] tracking-widest text-stone-400">O catálogo está vazio no momento.</p>';
                 } else {
                     renderizarVitrine();
                 }
             } catch (err) {
                 document.getElementById('vitrine').innerHTML = `
-                    <div class="text-center py-20">
-                        <p class="text-red-400 uppercase text-[10px] tracking-widest">Erro ao carregar catálogo</p>
-                        <p class="text-[9px] text-stone-400 mt-2">${err.message}</p>
+                    <div class="text-center py-20 px-6">
+                        <p class="text-red-500 font-bold text-xs uppercase mb-2">Erro de Conexão</p>
+                        <p class="text-[10px] text-stone-400">${err.message}</p>
+                        <p class="text-[9px] mt-4 text-stone-300">Verifique as políticas de RLS no Supabase.</p>
                     </div>`;
             }
         }
