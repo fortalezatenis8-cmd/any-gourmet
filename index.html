@@ -107,8 +107,8 @@
                 Continuar Comprando
             </button>
         </div>
-    </div>
-        <script>
+                            </div>
+                    <script>
         const SUPABASE_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
         const SUPABASE_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
         
@@ -231,8 +231,18 @@
         async function fazerLogin() {
             const email = document.getElementById('userEmail').value;
             const password = document.getElementById('userPass').value;
+            
+            // Tenta logar no Supabase
             const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
-            if (error) { alert("Erro no login: " + error.message); } else { document.body.classList.add('is-admin'); toggleLoginModal(false); alert("Bem-vindo, Admin!"); }
+            
+            if (error) {
+                // AGORA O ALERTA MOSTRARÁ O ERRO REAL DO SUPABASE
+                alert("Erro do Supabase: " + error.message);
+            } else {
+                document.body.classList.add('is-admin');
+                toggleLoginModal(false);
+                alert("Bem-vindo, Admin!");
+            }
         }
 
         async function logoutAdmin() { await _supabase.auth.signOut(); document.body.classList.remove('is-admin'); alert("Sessão encerrada."); }
@@ -280,5 +290,5 @@
         }
     </script>
 </body>
-    </html>
+</html>
 
