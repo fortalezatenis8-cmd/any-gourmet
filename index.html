@@ -125,7 +125,7 @@
                 if (error) {
                     led.className = "w-2 h-2 rounded-full bg-red-500";
                     textoStatus.innerText = "Erro de Conexão";
-                    console.error(error);
+                    console.error("Erro Supabase:", error.message);
                 } else {
                     led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
                     textoStatus.innerText = "Catálogo Online";
