@@ -17,153 +17,118 @@
 </head>
 <body class="text-stone-800 pb-24">
 
-    <header class="py-10 bg-white text-center border-b border-stone-100">
+    <header class="py-10 bg-white text-center border-b border-stone-100 shadow-sm">
         <h1 class="text-3xl font-serif tracking-widest uppercase text-stone-900">Any Gourmet</h1>
         <div id="status-conexao" class="flex items-center justify-center gap-2 mt-2">
             <div id="led" class="w-2 h-2 rounded-full bg-orange-400"></div>
-            <span id="texto-status" class="text-[9px] uppercase tracking-widest text-stone-400 font-bold">Conectando...</span>
+            <span id="texto-status" class="text-[9px] uppercase tracking-widest text-stone-400 font-bold">Sincronizando...</span>
         </div>
     </header>
 
     <main id="vitrine" class="customer-section max-w-4xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div id="loading-area" class="col-span-full text-center py-20 text-stone-400 text-[10px] uppercase font-bold animate-pulse">
-            Buscando catálogo...
-        </div>
+        <div class="col-span-full text-center py-20 text-stone-300 text-[10px] uppercase font-bold animate-pulse">Carregando catálogo...</div>
     </main>
 
-    <main class="admin-section max-w-4xl mx-auto px-6 py-10">
-        <div class="flex justify-between items-center mb-8 border-b pb-4">
-            <h2 class="text-xl font-serif italic font-bold">Painel de Gestão</h2>
-            <button onclick="location.reload()" class="text-[10px] bg-stone-200 px-4 py-2 rounded-full font-bold uppercase">Sair</button>
+    <main class="admin-section max-w-xl mx-auto px-6 py-10">
+        <h2 class="text-xl font-serif italic mb-6 text-center">Gerenciar Cardápio</h2>
+        <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-stone-100 mb-8 space-y-4">
+            <input type="text" id="new-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100">
+            <input type="text" id="new-categoria" placeholder="Categoria" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100">
+            <input type="text" id="new-img" placeholder="URL da Imagem" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100">
+            <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs tracking-widest">Salvar Doce</button>
         </div>
-
-        <section class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-stone-100 mb-8">
-            <h3 class="text-[10px] uppercase font-bold mb-4 text-stone-400 tracking-widest text-center">Cadastrar Novo Sabor</h3>
-            <div class="space-y-4">
-                <input type="text" id="new-nome" placeholder="Nome do Doce (ex: Brigadeiro Belga)" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300">
-                <input type="text" id="new-categoria" placeholder="Categoria (ex: Tradicionais)" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300">
-                <input type="text" id="new-img" placeholder="Link da Imagem (URL)" class="w-full p-4 bg-stone-50 rounded-2xl border-none outline-none ring-1 ring-stone-100 focus:ring-stone-300">
-                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-2xl font-bold uppercase text-xs tracking-widest hover:bg-stone-800 transition-all shadow-lg">Salvar Doce</button>
-            </div>
-        </section>
-
         <div id="admin-list" class="space-y-3"></div>
     </main>
 
-    <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t text-center z-40">
-        <button onclick="abrirLogin()" id="btn-adm-text" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400 hover:text-stone-900">
-            Área Restrita
-        </button>
+    <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-md text-center border-t">
+        <button onclick="abrirLogin()" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400">Acesso Restrito</button>
     </footer>
 
-    <div id="modalLogin" class="fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100] backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-[3rem] w-full max-w-sm shadow-2xl">
-            <h2 class="text-2xl font-serif mb-6 text-center italic">Identificação</h2>
-            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 border-none ring-1 ring-stone-200 outline-none">
-            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 border-none ring-1 ring-stone-200 outline-none">
-            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs">Acessar Painel</button>
-            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold text-center">Voltar ao Site</button>
+    <div id="modalLogin" class="fixed inset-0 bg-stone-900/40 hidden flex items-center justify-center p-6 z-50 backdrop-blur-sm">
+        <div class="bg-white p-8 rounded-[3rem] w-full max-w-sm">
+            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-2xl mb-4 border-none ring-1 ring-stone-200">
+            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-2xl mb-6 border-none ring-1 ring-stone-200">
+            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-2xl font-bold uppercase text-xs">Entrar</button>
+            <button onclick="fecharLogin()" class="w-full text-stone-400 text-[10px] mt-4 uppercase">Voltar</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES SUPABASE
+        // LIMPANDO CACHE AO CARREGAR
+        localStorage.clear();
+        sessionStorage.clear();
+
         const S_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
         const S_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
-        
-        // Limpeza de cache para evitar o erro 401 antigo
-        localStorage.clear();
         const _supabase = supabase.createClient(S_URL, S_KEY);
 
-        async function carregarDados() {
+        async function carregar() {
+            const { data, error } = await _supabase.from('doces').select('*').order('created_at', { ascending: false });
             const led = document.getElementById('led');
             const texto = document.getElementById('texto-status');
             
-            try {
-                const { data, error } = await _supabase.from('doces').select('*').order('created_at', { ascending: false });
-                
-                if (error) {
-                    led.className = "w-2 h-2 rounded-full bg-red-500";
-                    texto.innerText = "Erro de Conexão";
-                    console.error(error);
-                } else {
-                    led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e]";
-                    texto.innerText = "Sistema Online";
-                    renderizarVitrine(data || []);
-                    renderizarListaAdmin(data || []);
-                }
-            } catch (e) { 
-                texto.innerText = "Falha Crítica"; 
+            if (error) {
+                led.className = "w-2 h-2 rounded-full bg-red-500";
+                texto.innerText = "Chave ainda em cache...";
+            } else {
+                led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_5px_green]";
+                texto.innerText = "Catálogo Online";
+                renderizar(data);
             }
         }
 
-        function renderizarVitrine(lista) {
-            const container = document.getElementById('vitrine');
+        function renderizar(lista) {
+            const v = document.getElementById('vitrine');
+            const a = document.getElementById('admin-list');
             if(lista.length === 0) {
-                container.innerHTML = `<p class='col-span-full text-center py-20 text-stone-400 text-[10px] uppercase font-bold tracking-widest'>Nenhum doce cadastrado no momento.</p>`;
+                v.innerHTML = "<p class='col-span-full text-center py-10 text-stone-400 text-[10px] uppercase'>Cardápio vazio</p>";
                 return;
             }
-            container.innerHTML = lista.map(d => `
-                <div class="bg-white p-4 rounded-[2.5rem] border border-stone-100 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow">
-                    <img src="${d.imagem_url || 'https://via.placeholder.com/150'}" class="w-20 h-20 rounded-[1.5rem] object-cover bg-stone-50">
+            v.innerHTML = lista.map(d => `
+                <div class="bg-white p-4 rounded-[2rem] border border-stone-100 flex items-center gap-4 shadow-sm">
+                    <img src="${d.imagem_url || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-2xl object-cover bg-stone-50">
                     <div>
-                        <h3 class="font-bold text-xs uppercase text-stone-900 tracking-wider">${d.nome}</h3>
-                        <p class="text-[9px] text-stone-400 uppercase tracking-widest mt-1">${d.categoria}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderizarListaAdmin(lista) {
-            const container = document.getElementById('admin-list');
-            container.innerHTML = lista.map(d => `
-                <div class="flex justify-between items-center p-4 bg-white border border-stone-50 rounded-2xl">
-                    <div>
-                        <p class="text-[10px] font-bold text-stone-800 uppercase">${d.nome}</p>
+                        <h3 class="font-bold text-xs uppercase">${d.nome}</h3>
                         <p class="text-[8px] text-stone-400 uppercase tracking-widest">${d.categoria}</p>
                     </div>
-                    <button onclick="excluirDoce(${d.id})" class="text-[9px] text-red-400 font-bold uppercase bg-red-50 px-4 py-2 rounded-xl">Excluir</button>
                 </div>
             `).join('');
-        }
 
-        // FUNÇÕES ADM
-        function abrirLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
-        function fecharLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
-
-        async function fazerLogin() {
-            const email = document.getElementById('userEmail').value;
-            const pass = document.getElementById('userPass').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email, password: pass });
-            if (error) alert("Acesso Negado: Verifique e-mail e senha.");
-            else {
-                fecharLogin();
-                document.body.classList.add('is-admin');
-                alert("Olá, Any! Painel de gestão liberado.");
-            }
+            a.innerHTML = lista.map(d => `
+                <div class="flex justify-between items-center p-4 bg-white rounded-2xl border border-stone-50 text-[10px] font-bold uppercase">
+                    <span>${d.nome}</span>
+                    <button onclick="excluirDoce(${d.id})" class="text-red-400">Excluir</button>
+                </div>
+            `).join('');
         }
 
         async function salvarDoce() {
             const nome = document.getElementById('new-nome').value;
             const categoria = document.getElementById('new-categoria').value;
             const imagem_url = document.getElementById('new-img').value;
-            
-            if(!nome || !categoria) return alert("Por favor, preencha Nome e Categoria.");
-            
             const { error } = await _supabase.from('doces').insert([{ nome, categoria, imagem_url }]);
-            if(error) alert("Erro ao salvar: " + error.message);
-            else { alert("Doce cadastrado com sucesso!"); location.reload(); }
+            if(error) alert(error.message); else location.reload();
         }
 
         async function excluirDoce(id) {
-            if(!confirm("Deseja realmente excluir este item?")) return;
-            const { error } = await _supabase.from('doces').delete().eq('id', id);
-            if(error) alert(error.message);
-            else location.reload();
+            if(confirm("Excluir?")) {
+                await _supabase.from('doces').delete().eq('id', id);
+                location.reload();
+            }
         }
 
-        window.onload = carregarDados;
+        function abrirLogin() { document.getElementById('modalLogin').classList.remove('hidden'); }
+        function fecharLogin() { document.getElementById('modalLogin').classList.add('hidden'); }
+        async function fazerLogin() {
+            const e = document.getElementById('userEmail').value;
+            const p = document.getElementById('userPass').value;
+            const { error } = await _supabase.auth.signInWithPassword({ email: e, password: p });
+            if (error) alert("Erro de Login");
+            else { fecharLogin(); document.body.classList.add('is-admin'); }
+        }
+
+        window.onload = carregar;
     </script>
 </body>
-    </html>
-    
+            </html>
+                                                   
