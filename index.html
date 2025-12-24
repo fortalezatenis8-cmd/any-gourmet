@@ -3,193 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Oficial</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,700;1,900&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Atelier de Brigadeiros | Catálogo Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Montserrat', sans-serif; background-color: #fafaf9; color: #333; }
-        .font-serif-display { font-family: 'Playfair Display', serif; }
-        .admin-section { display: none; }
-        body.is-admin .admin-section { display: block; }
-        body.is-admin .customer-section { display: none; }
-        .modal { transition: opacity 0.3s ease-out, visibility 0.3s ease-out; }
-        .modal.hidden { opacity: 0; visibility: hidden; }
-        .modal.visible { opacity: 1; visibility: visible; }
+        :root {
+            --header-brown: #4e3629;
+            --bg-cream: #fdfaf6;
+            --gold-text: #b89356;
+            --card-bg: #fffcf9;
+            --text-dark: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            padding-bottom: 140px;
+        }
+
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1570476922354-81227cdbb76c?auto=format&fit=crop&q=80&w=1000');
+            background-size: cover;
+            background-position: center;
+            height: 35vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            border-bottom: 6px solid var(--gold-text);
+        }
+
+        header h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; }
+        header p { font-weight: 300; letter-spacing: 4px; text-transform: uppercase; font-size: 0.9rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        .category-title {
+            border-left: 5px solid var(--gold-text);
+            padding-left: 15px;
+            margin: 60px 0 30px;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--header-brown);
+        }
+
+        .grid-doces {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 35px;
+        }
+
+        .card-doce {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(184, 147, 86, 0.15);
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+
+        .card-doce:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+
+        .badge-cat {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 6px 15px;
+            border-radius: 25px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        .bg-tradicional { background: #8d6e63; }
+        .bg-especial { background: #b89356; }
+        .bg-premium { background: #4e3629; }
+
+        .doce-img { width: 100%; height: 250px; object-fit: cover; }
+        .doce-info { padding: 25px; text-align: center; }
+        .doce-info h4 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 8px; }
+        .doce-desc { font-size: 0.85rem; color: #777; margin-bottom: 15px; font-weight: 300; }
+        
+        .price-tag { color: var(--gold-text); font-weight: 600; margin-bottom: 20px; font-size: 1.1rem; border-top: 1px solid #eee; padding-top: 10px; display: block; }
+
+        .selector { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        .btn-math {
+            background: var(--header-brown);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+        }
+        .qty-num { font-weight: 600; font-size: 1.4rem; min-width: 35px; color: var(--header-brown); }
+
+        .cart-footer {
+            position: fixed;
+            bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 100px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border: 2px solid var(--gold-text);
+        }
+
+        .total-info p { font-size: 1.8rem; font-weight: 700; color: var(--header-brown); font-family: 'Playfair Display', serif; }
+        .btn-order { background: #25d366; color: white; padding: 15px 40px; border-radius: 50px; border: none; font-weight: 600; cursor: pointer; font-size: 1rem; }
     </style>
 </head>
-<body class="pb-24">
-    <header class="py-8 bg-white text-center border-b border-stone-100 shadow-sm sticky top-0 z-40">
-        <div class="max-w-6xl mx-auto flex justify-between items-center px-6">
-            <h1 class="text-3xl font-serif-display tracking-wide uppercase text-stone-900 flex-grow text-center">Any Gourmet</h1>
-            <div class="flex items-center gap-4">
-                <div id="status-conexao" class="flex items-center gap-2">
-                    <div id="led" class="w-2 h-2 rounded-full bg-orange-400"></div>
-                </div>
-                <button onclick="toggleCartModal(true)" class="relative p-2 rounded-full bg-stone-100">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.215 1.028a4.125 4.125 0 011.17 2.054l.707 3.492a3.75 3.75 0 00.912 1.746c.144.144.273.284.402.413l.081.082a3.75 3.75 0 003.044 1.258h1.347c.789 0 1.406.494 1.48 1.144L17.5 17.25h1.875c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125h-15c-.621 0-1.125-.504-1.125-1.125v-1.5c0-.621.504-1.125 1.125-1.125H6.25l-.27-1.35a3.75 3.75 0 00-.91-1.745l-.708-3.491A4.125 4.125 0 002.25 3z" /></svg>
-                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center">0</span>
-                </button>
-            </div>
-        </div>
-    </header>
+<body>
 
-    <main id="vitrine" class="customer-section max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div id="loading-msg" class="col-span-full text-center py-20 text-stone-300 animate-pulse uppercase text-xs font-bold tracking-widest">Sincronizando com o banco de dados...</div>
-    </main>
+<header>
+    <h1>Atelier de Delícias</h1>
+    <p>Handmade & Sophisticated</p>
+</header>
 
-    <main class="admin-section max-w-4xl mx-auto px-6 py-12">
-        <div class="bg-white p-8 rounded-[2.5rem] shadow-md border mb-8">
-            <h3 class="text-[11px] uppercase font-bold mb-5 text-center tracking-widest text-stone-400">Cadastrar Novo Doce</h3>
-            <div class="space-y-4">
-                <input type="text" id="doce-nome" placeholder="Nome do Doce" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="text" id="doce-categoria" placeholder="Categoria (Ex: Bolos)" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="number" id="doce-preco" placeholder="Preço (Ex: 15.50)" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <input type="text" id="doce-img" placeholder="URL da Imagem" class="w-full p-4 bg-stone-50 rounded-xl outline-none ring-1 ring-stone-100">
-                <button onclick="salvarDoce()" class="w-full bg-stone-900 text-white p-5 rounded-xl font-bold uppercase text-xs">Salvar Doce</button>
-            </div>
-        </div>
-        <div id="admin-list" class="space-y-3"></div>
-        <button onclick="location.reload()" class="w-full mt-8 text-stone-400 uppercase text-[10px] font-bold">Sair do Modo Admin</button>
-    </main>
+<div class="container">
+    <h2 class="category-title">Seleção Tradicional</h2>
+    <div id="grid-tradicional" class="grid-doces"></div>
 
-    <div id="modalCart" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[90] backdrop-blur-sm">
-        <div class="bg-white p-8 rounded-[3rem] w-full max-w-lg shadow-2xl flex flex-col max-h-[80vh]">
-            <h2 class="text-2xl font-serif-display mb-6 text-center italic">Seu Pedido</h2>
-            <div id="cart-items" class="flex-grow overflow-y-auto space-y-4 mb-6"></div>
-            <div class="border-t pt-4 flex justify-between font-bold text-lg text-stone-800">
-                <span>Total:</span><span id="cart-total">R$ 0,00</span>
-            </div>
-            <button onclick="enviarPedidoWhatsapp()" class="w-full bg-green-500 text-white p-4 rounded-xl font-bold uppercase text-xs mt-6 shadow-lg">Enviar para o WhatsApp</button>
-            <button onclick="toggleCartModal(false)" class="text-stone-400 text-[10px] mt-4 uppercase font-bold text-center w-full">Voltar à Vitrine</button>
-        </div>
+    <h2 class="category-title">Seleção Especial</h2>
+    <div id="grid-especial" class="grid-doces"></div>
+
+    <h2 class="category-title">Seleção Premium</h2>
+    <div id="grid-premium" class="grid-doces"></div>
+</div>
+
+<div class="cart-footer">
+    <div class="total-info">
+        <p>R$ <span id="resumo-total">0,00</span></p>
     </div>
-
-    <div id="modalLogin" class="modal fixed inset-0 bg-stone-900/60 hidden flex items-center justify-center p-6 z-[100]">
-        <div class="bg-white p-8 rounded-[3rem] w-full max-w-sm shadow-2xl">
-            <h2 class="text-center font-serif-display italic mb-6 text-xl text-stone-800">Identificação</h2>
-            <input type="email" id="userEmail" placeholder="E-mail" class="w-full p-4 bg-stone-50 rounded-xl mb-4 outline-none ring-1 ring-stone-100 text-sm">
-            <input type="password" id="userPass" placeholder="Senha" class="w-full p-4 bg-stone-50 rounded-xl mb-6 outline-none ring-1 ring-stone-200 text-sm">
-            <button onclick="fazerLogin()" class="w-full bg-stone-900 text-white p-4 rounded-xl font-bold uppercase text-xs">Entrar no Painel</button>
-            <button onclick="toggleLoginModal(false)" class="w-full text-stone-400 text-[10px] mt-4 uppercase font-bold">Cancelar</button>
+    <button class="btn-order" onclick="enviarPedido()">PEDIR VIA WHATSAPP</button>
         </div>
-    </div>
+    <script>
+    // TABELAS DE PREÇOS DAS CATEGORIAS
+    const tabelas = {
+        tradicional: [
+            {min: 25, preco: 1.80}, {min: 20, preco: 2.00}, {min: 15, preco: 2.40},
+            {min: 12, preco: 2.60}, {min: 10, preco: 2.80}, {min: 8, preco: 3.20}, {min: 5, preco: 4.00}
+        ],
+        especial: [
+            {min: 25, preco: 1.90}, {min: 20, preco: 2.15}, {min: 15, preco: 2.60},
+            {min: 12, preco: 2.85}, {min: 10, preco: 3.10}, {min: 8, preco: 3.55}, {min: 5, preco: 4.50}
+        ],
+        premium: [
+            {min: 25, preco: 2.00}, {min: 20, preco: 2.30}, {min: 15, preco: 2.80},
+            {min: 12, preco: 3.10}, {min: 10, preco: 3.40}, {min: 8, preco: 3.90}, {min: 5, preco: 5.00}
+        ]
+    };
 
-    <footer class="fixed bottom-0 left-0 right-0 p-6 bg-white/90 backdrop-blur-md border-t text-center z-40">
-        <button onclick="toggleLoginModal(true)" class="text-[9px] font-bold uppercase tracking-[0.4em] text-stone-400 hover:text-stone-900 transition-colors">Configurações</button>
-                </footer>
-        <script>
-        // CONFIGURAÇÕES SUPABASE
-        const S_URL = 'https://apsbsqmtjisrnvfrgkwe.supabase.co';
-        const S_KEY = 'EyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFwc2JzcW10amlzcm52ZnJna3dlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNDc1MDAsImV4cCI6MjA4MTgyMzUwMH0.QzfXkwLiqRloFcTiezGlEjqkt9aNqgCywFhjsihQk-g';
-        
-        let _supabase;
-        let produtos = [], carrinho = {};
+    const produtos = [
+        { id: 1, nome: "Chocolate Belga", cat: "tradicional", desc: "Clássico Gourmet.", img: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=500" },
+        { id: 2, nome: "Ninho com Nutella", cat: "especial", desc: "Sabor Incomparável.", img: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=500" },
+        { id: 3, nome: "Pistache Real", cat: "premium", desc: "Pistaches Selecionados.", img: "https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?w=500" }
+    ];
 
-        // INICIALIZAÇÃO ROBUSTA (Correção sugerida pela IA do Supabase)
-        function init() {
-            try {
-                if (window.supabase && typeof window.supabase.createClient === 'function') {
-                    _supabase = window.supabase.createClient(S_URL, S_KEY);
-                    carregarDados();
-                } else {
-                    console.error("Supabase library not found.");
-                    document.getElementById('led').className = "w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_red]";
-                }
-            } catch (e) {
-                console.error("Erro na inicialização:", e);
-            }
-        }
+    let carrinho = {};
 
-        async function carregarDados() {
-            if (!_supabase) return;
-            localStorage.clear();
-            const { data, error } = await _supabase.from('doces').select('*').order('created_at', { ascending: false });
-            
-            const led = document.getElementById('led');
-            if (error) {
-                led.className = "w-2 h-2 rounded-full bg-red-500 shadow-[0_0_5px_red]";
-                console.error("Erro de busca:", error.message);
-            } else {
-                led.className = "w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_green]";
-                produtos = data || [];
-                renderizar();
-            }
-        }
-
-        function renderizar() {
-            const v = document.getElementById('vitrine');
-            const a = document.getElementById('admin-list');
-            
-            v.innerHTML = produtos.length ? produtos.map(p => `
-                <div class="bg-white p-6 rounded-[2.5rem] border shadow-sm text-center flex flex-col items-center hover:shadow-md transition-all">
-                    <img src="${p.imagem_url || ''}" class="w-32 h-32 rounded-2xl object-cover bg-stone-50 mb-4 shadow-sm">
-                    <h3 class="font-bold text-xs uppercase mb-1 tracking-wider text-stone-800">${p.nome}</h3>
-                    <p class="text-[10px] text-stone-400 uppercase mb-3 tracking-widest">${p.categoria}</p>
-                    <p class="font-bold text-lg mb-4 text-stone-900">R$ ${parseFloat(p.preco || 0).toFixed(2).replace('.', ',')}</p>
-                    <button onclick="addCarrinho(${p.id})" class="bg-stone-900 text-white text-[10px] font-bold px-8 py-3 rounded-full uppercase hover:scale-105 active:scale-95 transition-all shadow-md">Adicionar</button>
-                </div>
-            `).join('') : "<p class='col-span-full text-center py-10 text-stone-400 uppercase text-xs font-bold'>Cardápio em atualização...</p>";
-
-            if (a) {
-                a.innerHTML = produtos.map(p => `
-                    <div class="flex justify-between items-center p-4 bg-white border rounded-2xl text-[10px] font-bold uppercase shadow-sm">
-                        <span>${p.nome}</span>
-                        <button onclick="excluir(${p.id})" class="text-red-500 bg-red-50 px-3 py-1 rounded-lg hover:bg-red-100">Excluir</button>
+    function render() {
+        produtos.forEach(p => {
+            const grid = document.getElementById(`grid-${p.cat}`);
+            grid.innerHTML += `
+                <div class="card-doce">
+                    <span class="badge-cat bg-${p.cat}">${p.cat}</span>
+                    <img src="${p.img}" class="doce-img">
+                    <div class="doce-info">
+                        <h4>${p.nome}</h4>
+                        <p class="doce-desc">${p.desc}</p>
+                        <span class="price-tag" id="tag-${p.id}">A partir de R$ ${tabelas[p.cat][6].preco.toFixed(2)}</span>
+                        <div class="selector">
+                            <button class="btn-math" onclick="updateQty(${p.id}, -1)">-</button>
+                            <span class="qty-num" id="qty-${p.id}">0</span>
+                            <button class="btn-math" onclick="updateQty(${p.id}, 1)">+</button>
+                        </div>
                     </div>
-                `).join('');
+                </div>
+            `;
+        });
+    }
+
+    function updateQty(id, delta) {
+        if (!carrinho[id]) {
+            const p = produtos.find(x => x.id === id);
+            carrinho[id] = { ...p, qty: 0 };
+        }
+        carrinho[id].qty += delta;
+        if (carrinho[id].qty < 0) carrinho[id].qty = 0;
+        document.getElementById(`qty-${id}`).innerText = carrinho[id].qty;
+        calculate();
+    }
+
+    function calculate() {
+        let total = 0;
+        for (let id in carrinho) {
+            const item = carrinho[id];
+            if (item.qty >= 5) {
+                const faixa = tabelas[item.cat].find(f => item.qty >= f.min) || {preco: 5.00};
+                total += item.qty * faixa.preco;
+                document.getElementById(`tag-${id}`).innerText = `Unitário: R$ ${faixa.preco.toFixed(2)}`;
             }
         }
+        document.getElementById('resumo-total').innerText = total.toFixed(2).replace('.', ',');
+    }
 
-        function addCarrinho(id) {
-            const p = produtos.find(i => i.id === id);
-            carrinho[id] = carrinho[id] ? { ...carrinho[id], qtd: carrinho[id].qtd + 1 } : { ...p, qtd: 1 };
-            atualizarCarrinho();
+    function enviarPedido() {
+        let msg = "✨ *NOVO PEDIDO ATELIER* ✨\n\n";
+        let total = 0;
+        for (let id in carrinho) {
+            const item = carrinho[id];
+            if (item.qty >= 5) {
+                const faixa = tabelas[item.cat].find(f => item.qty >= f.min);
+                msg += `▫️ ${item.qty}x ${item.nome} (R$ ${faixa.preco.toFixed(2)})\n`;
+                total += item.qty * faixa.preco;
+            }
         }
+        msg += `\n*TOTAL: R$ ${total.toFixed(2)}*`;
+        window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`);
+    }
 
-        function atualizarCarrinho() {
-            const items = Object.values(carrinho);
-            let total = 0, count = 0;
-            document.getElementById('cart-items').innerHTML = items.map(i => {
-                const sub = i.preco * i.qtd;
-                total += sub; count += i.qtd;
-                return `<div class="flex justify-between text-[10px] font-bold uppercase border-b border-stone-50 pb-2"><span>${i.qtd}x ${i.nome}</span><span>R$ ${sub.toFixed(2).replace('.', ',')}</span></div>`;
-            }).join('');
-            document.getElementById('cart-total').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('cart-count').innerText = count;
-        }
-
-        function enviarPedidoWhatsapp() {
-            const itens = Object.values(carrinho);
-            if (!itens.length) return alert("Adicione itens ao carrinho!");
-            let msg = "*Novo Pedido - Any Gourmet*\n\n";
-            itens.forEach(i => msg += `• ${i.qtd}x ${i.nome} - R$ ${(i.preco * i.qtd).toFixed(2).replace('.', ',')}\n`);
-            msg += `\n*TOTAL DO PEDIDO: ${document.getElementById('cart-total').innerText}*`;
-            window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`);
-        }
-
-        async function salvarDoce() {
-            const n = document.getElementById('doce-nome').value, c = document.getElementById('doce-categoria').value, 
-                  p = document.getElementById('doce-preco').value, i = document.getElementById('doce-img').value;
-            if(!n || !p) return alert("Preencha Nome e Preço!");
-            const { error } = await _supabase.from('doces').insert([{ nome: n, categoria: c, preco: p, imagem_url: i }]);
-            if (error) alert("Erro: " + error.message); else location.reload();
-        }
-
-        async function excluir(id) { if(confirm("Deseja excluir?")) { await _supabase.from('doces').delete().eq('id', id); location.reload(); } }
-        
-        function toggleCartModal(s) { document.getElementById('modalCart').classList.toggle('hidden', !s); }
-        function toggleLoginModal(s) { document.getElementById('modalLogin').classList.toggle('hidden', !s); }
-        
-        async function fazerLogin() {
-            const e = document.getElementById('userEmail').value, p = document.getElementById('userPass').value;
-            const { error } = await _supabase.auth.signInWithPassword({ email: e, password: p });
-            if (error) alert("Acesso negado: verifique e-mail e senha."); 
-            else { toggleLoginModal(false); document.body.classList.add('is-admin'); alert("Olá, Any! Painel liberado."); }
-        }
-
-        window.onload = init;
-    </script>
+    render();
+</script>
 </body>
 </html>
 
