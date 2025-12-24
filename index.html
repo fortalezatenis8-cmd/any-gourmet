@@ -3,48 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atelier de Brigadeiros | Pedido Online</title>
+    <title>Atelier Gourmet | Checkout</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --brown: #4e3629; --gold: #b89356; --cream: #fdfaf6; --white: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--cream); color: #333; padding-bottom: 150px; }
         
-        header { 
-            background: var(--brown); height: 150px; display: flex; flex-direction: column; 
-            justify-content: center; align-items: center; color: white; border-bottom: 5px solid var(--gold);
-        }
+        header { background: var(--brown); padding: 30px; text-align: center; color: white; border-bottom: 5px solid var(--gold); }
+        header h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        .category-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin: 30px 0 15px; color: var(--brown); border-bottom: 2px solid var(--gold); }
+        .category-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin: 30px 0 15px; color: var(--brown); border-bottom: 2px solid var(--gold); }
 
-        /* GRID */
-        .grid-doces { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-bottom: 30px; }
-        .card-doce { background: var(--white); border-radius: 12px; padding: 15px; border: 1px solid #ddd; text-align: center; }
-        .selector { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 10px; }
-        .btn-math { background: var(--brown); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .grid-doces { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        .card-doce { background: var(--white); border-radius: 12px; padding: 15px; border: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+        .selector { display: flex; align-items: center; gap: 15px; }
+        .btn-math { background: var(--brown); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
+        .qty-num { font-weight: 600; font-size: 1.2rem; min-width: 25px; text-align: center; }
 
-        /* SEÇÃO DE ENDEREÇO - AGORA BEM VISÍVEL */
-        .checkout-box { 
-            background: #fff; padding: 25px; border-radius: 15px; border: 3px solid var(--gold); 
-            margin-top: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-        }
-        .checkout-box h3 { font-family: 'Playfair Display', serif; color: var(--brown); margin-bottom: 20px; text-align: center; font-size: 1.5rem; }
-        
+        /* FORMULÁRIO DE DADOS - ESSENCIAL PARA O ENVIO */
+        .checkout-box { background: #fff; padding: 25px; border-radius: 15px; border: 2px solid var(--gold); margin-top: 40px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .checkout-box h3 { font-family: 'Playfair Display', serif; color: var(--brown); margin-bottom: 20px; text-align: center; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; color: var(--brown); }
-        .form-group input, .form-group select { 
-            width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem;
-        }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; font-family: 'Poppins', sans-serif; }
 
-        /* RODAPÉ FIXO */
-        .cart-footer { 
-            position: fixed; bottom: 0; left: 0; width: 100%; background: white; 
-            padding: 20px; border-top: 3px solid var(--gold); display: flex; 
-            justify-content: space-around; align-items: center; z-index: 9999;
-        }
-        .total-val { font-size: 1.6rem; font-weight: 700; color: var(--brown); }
-        .btn-order { background: #25d366; color: white; padding: 15px 30px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; font-size: 1rem; }
+        .footer-fixo { position: fixed; bottom: 0; left: 0; width: 100%; background: white; padding: 20px; border-top: 3px solid var(--gold); display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .total-box { font-size: 1.4rem; font-weight: 700; color: var(--brown); }
+        .btn-whatsapp { background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -65,158 +52,144 @@
     <div id="grid-premium" class="grid-doces"></div>
 
     <div class="checkout-box">
-        <h3>Dados para Entrega</h3>
-        
+        <h3>Informações de Entrega</h3>
         <div class="form-group">
-            <label>Seu Nome Completo:</label>
-            <input type="text" id="cli_nome" placeholder="Digite seu nome">
+            <label>Nome da Cliente:</label>
+            <input type="text" id="nome_cliente" placeholder="Digite seu nome">
         </div>
-
         <div class="form-group">
-            <label>Seu WhatsApp:</label>
-            <input type="tel" id="cli_tel" placeholder="(00) 00000-0000">
+            <label>Telefone de Contato:</label>
+            <input type="tel" id="tel_cliente" placeholder="(00) 00000-0000">
         </div>
-
+        <div class="form-group">
+            <label>Endereço (Rua e Número):</label>
+            <input type="text" id="end_rua" placeholder="Ex: Rua das Flores, 123">
+        </div>
         <div style="display: flex; gap: 10px;">
-            <div class="form-group" style="flex: 2;">
-                <label>Rua e Número:</label>
-                <input type="text" id="cli_rua" placeholder="Ex: Rua das Flores, 123">
-            </div>
             <div class="form-group" style="flex: 1;">
                 <label>Bairro:</label>
-                <input type="text" id="cli_bairro" placeholder="Bairro">
+                <input type="text" id="end_bairro" placeholder="Seu bairro">
+            </div>
+            <div class="form-group" style="flex: 1;">
+                <label>Cidade:</label>
+                <input type="text" id="end_cidade" value="Fortaleza">
             </div>
         </div>
-
         <div class="form-group">
-            <label>Cidade:</label>
-            <input type="text" id="cli_cidade" value="Fortaleza">
-        </div>
-
-        <div class="form-group">
-            <label>Forma de Pagamento:</label>
-            <select id="cli_pagto">
+            <label>Método de Pagamento:</label>
+            <select id="pagamento">
                 <option value="Pix">Pix</option>
-                <option value="Cartão">Cartão de Crédito/Débito</option>
+                <option value="Cartão">Cartão (Crédito/Débito)</option>
                 <option value="Dinheiro">Dinheiro</option>
             </select>
         </div>
     </div>
 </div>
 
-<div class="cart-footer">
-    <div class="total-val">Total: R$ <span id="resumo-total">0,00</span></div>
-    <button class="btn-order" onclick="enviarPedido()">ENVIAR PEDIDO</button>
+<div class="footer-fixo">
+    <div class="total-box">Total: R$ <span id="total-display">0,00</span></div>
+    <button class="btn-whatsapp" onclick="enviarParaWhatsApp()">ENVIAR PEDIDO</button>
 </div>
     <script>
-    const tabelas = {
-        tradicional: [{min: 25, preco: 1.80}, {min: 20, preco: 2.00}, {min: 15, preco: 2.40}, {min: 12, preco: 2.60}, {min: 10, preco: 2.80}, {min: 8, preco: 3.20}, {min: 5, preco: 4.00}],
-        especial: [{min: 25, preco: 1.90}, {min: 20, preco: 2.15}, {min: 15, preco: 2.60}, {min: 12, preco: 2.85}, {min: 10, preco: 3.10}, {min: 8, preco: 3.55}, {min: 5, preco: 4.50}],
-        premium: [{min: 25, preco: 2.00}, {min: 20, preco: 2.30}, {min: 15, preco: 2.80}, {min: 12, preco: 3.10}, {min: 10, preco: 3.40}, {min: 8, preco: 3.90}, {min: 5, preco: 5.00}]
+    // TABELAS DE PREÇO EXTRAÍDAS DAS IMAGENS
+    const precos = {
+        tradicional: [{min: 25, p: 1.80}, {min: 20, p: 2.00}, {min: 15, p: 2.40}, {min: 12, p: 2.60}, {min: 10, p: 2.80}, {min: 8, p: 3.20}, {min: 5, p: 4.00}],
+        especial: [{min: 25, p: 1.90}, {min: 20, p: 2.15}, {min: 15, p: 2.60}, {min: 12, p: 2.85}, {min: 10, p: 3.10}, {min: 8, p: 3.55}, {min: 5, p: 4.50}],
+        premium: [{min: 25, p: 2.00}, {min: 20, p: 2.30}, {min: 15, p: 2.80}, {min: 12, p: 3.10}, {min: 10, p: 3.40}, {min: 8, p: 3.90}, {min: 5, p: 5.00}]
     };
 
-    const produtos = [
-        { id: 1, nome: "Cacau", cat: "tradicional" },
-        { id: 2, nome: "Ninho", cat: "tradicional" },
-        { id: 3, nome: "Morango", cat: "tradicional" },
-        { id: 4, nome: "Red Velvet", cat: "tradicional" },
-        { id: 5, nome: "Cajuzinho", cat: "especial" },
-        { id: 6, nome: "Maracujá", cat: "especial" },
-        { id: 7, nome: "Amendoim", cat: "especial" },
-        { id: 8, nome: "Capuccino", cat: "especial" },
-        { id: 9, nome: "Churros", cat: "premium" },
-        { id: 10, nome: "Confete", cat: "premium" },
-        { id: 11, nome: "Ferrero Rocher", cat: "premium" },
-        { id: 12, nome: "Ninho com Nutella", cat: "premium" },
+    const listaProdutos = [
+        { id: 1, nome: "Cacau", cat: "tradicional" }, { id: 2, nome: "Ninho", cat: "tradicional" },
+        { id: 3, nome: "Morango", cat: "tradicional" }, { id: 4, nome: "Red Velvet", cat: "tradicional" },
+        { id: 5, nome: "Cajuzinho", cat: "especial" }, { id: 6, nome: "Maracujá", cat: "especial" },
+        { id: 7, nome: "Amendoim", cat: "especial" }, { id: 8, nome: "Capuccino", cat: "especial" },
+        { id: 9, nome: "Churros", cat: "premium" }, { id: 10, nome: "Confete", cat: "premium" },
+        { id: 11, nome: "Ferrero Rocher", cat: "premium" }, { id: 12, nome: "Ninho com Nutella", cat: "premium" },
         { id: 13, nome: "Morango com Nutella", cat: "premium" }
     ];
 
-    let carrinho = {};
+    let pedido = {};
 
-    function render() {
-        produtos.forEach(p => {
+    function montarLoja() {
+        listaProdutos.forEach(p => {
             document.getElementById(`grid-${p.cat}`).innerHTML += `
                 <div class="card-doce">
-                    <h4>${p.nome}</h4>
+                    <span><strong>${p.nome}</strong></span>
                     <div class="selector">
-                        <button class="btn-math" onclick="updateQty(${p.id}, -1)">-</button>
-                        <span class="qty-num" id="qty-${p.id}">0</span>
-                        <button class="btn-math" onclick="updateQty(${p.id}, 1)">+</button>
+                        <button class="btn-math" onclick="alterarQtd(${p.id}, -1)">-</button>
+                        <span class="qty-num" id="q-${p.id}">0</span>
+                        <button class="btn-math" onclick="alterarQtd(${p.id}, 1)">+</button>
                     </div>
-                </div>
-            `;
+                </div>`;
         });
     }
 
-    function updateQty(id, delta) {
-        if (!carrinho[id]) carrinho[id] = { ...produtos.find(x => x.id === id), qty: 0 };
-        carrinho[id].qty += delta;
-        if (carrinho[id].qty < 0) carrinho[id].qty = 0;
-        document.getElementById(`qty-${id}`).innerText = carrinho[id].qty;
-        calculate();
+    function alterarQtd(id, val) {
+        if (!pedido[id]) pedido[id] = { ...listaProdutos.find(x => x.id === id), qtd: 0 };
+        pedido[id].qtd += val;
+        if (pedido[id].qtd < 0) pedido[id].qtd = 0;
+        document.getElementById(`q-${id}`).innerText = pedido[id].qtd;
+        atualizarTotal();
     }
 
-    function calculate() {
+    function atualizarTotal() {
         let total = 0;
-        for (let id in carrinho) {
-            const item = carrinho[id];
-            if (item.qty >= 5) {
-                const faixa = tabelas[item.cat].find(f => item.qty >= f.min);
-                total += item.qty * faixa.preco;
+        for (let id in pedido) {
+            let item = pedido[id];
+            if (item.qtd >= 5) {
+                let faixa = precos[item.cat].find(f => item.qtd >= f.min) || {p: 5.00};
+                total += item.qtd * faixa.p;
             }
         }
-        document.getElementById('resumo-total').innerText = total.toFixed(2).replace('.', ',');
+        document.getElementById('total-display').innerText = total.toFixed(2).replace('.', ',');
     }
 
-    function enviarPedido() {
-        const nome = document.getElementById('cli_nome').value;
-        const rua = document.getElementById('cli_rua').value;
-        const bairro = document.getElementById('cli_bairro').value;
-        const cidade = document.getElementById('cli_cidade').value;
-        const tel = document.getElementById('cli_tel').value;
-        const pagto = document.getElementById('cli_pagto').value;
+    function enviarParaWhatsApp() {
+        // CAPTURA DOS DADOS DO FORMULÁRIO
+        const nome = document.getElementById('nome_cliente').value;
+        const tel = document.getElementById('tel_cliente').value;
+        const rua = document.getElementById('end_rua').value;
+        const bairro = document.getElementById('end_bairro').value;
+        const cidade = document.getElementById('end_cidade').value;
+        const pgto = document.getElementById('pagamento').value;
 
         if (!nome || !rua || !bairro) {
             alert("Por favor, preencha seu NOME e ENDEREÇO antes de enviar.");
             return;
         }
 
-        const agora = new Date();
-        const dataStr = agora.toLocaleDateString('pt-BR');
-        const horaStr = agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-        
-        // Link Automático do Google Maps
-        const linkMaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(rua + ', ' + bairro + ', ' + cidade)}`;
+        const data = new Date().toLocaleDateString('pt-BR');
+        const hora = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+        const linkMapa = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(rua + ', ' + bairro + ', ' + cidade)}`;
 
-        let msg = `✨ *NOVO PEDIDO - ATELIER* ✨\n`;
-        msg += `📅 Data: ${dataStr} | 🕒 Hora: ${horaStr}\n\n`;
-        msg += `👤 *CLIENTE:* ${nome}\n`;
-        msg += `📞 *CONTATO:* ${tel}\n`;
-        msg += `💳 *PAGAMENTO:* ${pagto}\n\n`;
-        msg += `📍 *ENDEREÇO:* ${rua}, ${bairro} - ${cidade}\n`;
-        msg += `🔗 *MAPA:* ${linkMaps}\n\n`;
-        msg += `🛍️ *ITENS DO PEDIDO:* \n`;
+        let mensagem = `✨ *PEDIDO ATELIER GOURMET* ✨\n`;
+        mensagem += `📅 *Data:* ${data} | 🕒 *Hora:* ${hora}\n\n`;
+        mensagem += `👤 *CLIENTE:* ${nome}\n`;
+        mensagem += `📞 *CONTATO:* ${tel}\n`;
+        mensagem += `💳 *PAGAMENTO:* ${pgto}\n\n`;
+        mensagem += `📍 *ENDEREÇO DE ENTREGA:*\n${rua}, ${bairro} - ${cidade}\n`;
+        mensagem += `🔗 *MAPA:* ${linkMapa}\n\n`;
+        mensagem += `🛍️ *ITENS DA ENCOMENDA:* \n`;
 
         let temItens = false;
-        for (let id in carrinho) {
-            const item = carrinho[id];
-            if (item.qty >= 5) {
+        for (let id in pedido) {
+            let item = pedido[id];
+            if (item.qtd >= 5) {
                 temItens = true;
-                const faixa = tabelas[item.cat].find(f => item.qty >= f.min);
-                msg += `• ${item.qty}x ${item.nome} - R$ ${(item.qty * faixa.preco).toFixed(2)}\n`;
+                let faixa = precos[item.cat].find(f => item.qtd >= f.min);
+                mensagem += `• ${item.qtd}x ${item.nome} - R$ ${(item.qtd * faixa.p).toFixed(2)}\n`;
             }
         }
 
-        if (!temItens) {
-            alert("Adicione pelo menos 5 brigadeiros de um sabor.");
-            return;
-        }
+        if (!temItens) return alert("Selecione pelo menos 5 unidades de algum sabor.");
 
-        msg += `\n💰 *TOTAL: R$ ${document.getElementById('resumo-total').innerText}*`;
+        mensagem += `\n💰 *VALOR TOTAL: R$ ${document.getElementById('total-display').innerText}*`;
         
-        window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`);
+        // ENVIO FINAL
+        window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(mensagem)}`);
     }
-    render();
+
+    montarLoja();
 </script>
 </body>
 </html>
