@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,10 +10,10 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: #0a0a0a; color: var(--white); overflow-x: hidden; }
 
-        /* Hero com Imagem de Alta Qualidade */
+        /* Hero com Logo e Imagem de Alta Qualidade */
         .hero {
-            height: 70vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
+            height: 80vh;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.8)), 
                         url('https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=2072&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
@@ -23,71 +22,53 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            padding: 20px;
         }
-        .hero h1 { font-family: 'Cinzel', serif; font-size: 4rem; letter-spacing: 8px; color: var(--gold); text-shadow: 0 4px 15px rgba(0,0,0,1); }
-        .hero p { font-size: 1.2rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 15px; }
+
+        .brand-logo {
+            width: 180px; /* Ajuste o tamanho conforme necessário */
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .hero h1 { font-family: 'Cinzel', serif; font-size: clamp(2.5rem, 8vw, 4rem); letter-spacing: 8px; color: var(--gold); text-shadow: 0 4px 15px rgba(0,0,0,1); }
+        .hero p { font-size: 1.1rem; letter-spacing: 4px; text-transform: uppercase; margin-top: 10px; opacity: 0.9; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .category-header { text-align: center; margin-bottom: 50px; }
-        .category-header h2 { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--gold); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 10px; }
+        .category-header h2 { font-family: 'Cinzel', serif; font-size: 2.2rem; color: var(--gold); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 10px; }
 
-        /* Card com Imagem como Fundo */
+        /* Cards Imersivos */
         .grid-doces { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .card-doce { 
-            position: relative;
-            height: 450px;
-            border-radius: 25px; 
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            border: 1px solid rgba(197, 160, 89, 0.3);
-            transition: 0.5s;
+            position: relative; height: 450px; border-radius: 25px; overflow: hidden;
+            display: flex; flex-direction: column; justify-content: flex-end;
+            border: 1px solid rgba(197, 160, 89, 0.3); transition: 0.5s;
         }
-        .card-doce:hover { transform: scale(1.03); border-color: var(--gold); box-shadow: 0 10px 30px rgba(197, 160, 89, 0.2); }
-        
-        .doce-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
-            transition: 0.5s;
-        }
+        .card-doce:hover { transform: translateY(-10px); border-color: var(--gold); }
+        .doce-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: 1; transition: 0.5s; }
         .card-doce:hover .doce-bg { transform: scale(1.1); }
+        .card-content { position: relative; z-index: 2; background: linear-gradient(transparent, rgba(0,0,0,0.95) 60%); padding: 30px 20px; text-align: center; }
+        .card-doce h4 { font-family: 'Cinzel', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
+        .doce-desc { font-size: 0.85rem; color: #ccc; margin-bottom: 15px; min-height: 40px; }
 
-        .card-content {
-            position: relative;
-            z-index: 2;
-            background: linear-gradient(transparent, rgba(0,0,0,0.95) 60%);
-            padding: 30px 20px;
-            text-align: center;
-        }
+        .selector { display: flex; align-items: center; justify-content: center; gap: 15px; }
+        .btn-math { background: var(--gold); border: none; color: black; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 1.2rem; }
 
-        .card-doce h4 { font-family: 'Cinzel', serif; font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
-        .doce-desc { font-size: 0.85rem; color: #ccc; margin-bottom: 20px; line-height: 1.4; }
+        /* Checkout e Footer */
+        .checkout-box { background: rgba(20, 20, 20, 0.9); padding: 40px; border-radius: 40px; margin-top: 60px; border: 1px solid var(--gold); }
+        .form-group input, .form-group select, .form-group textarea { background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2); width: 100%; padding: 15px 5px; color: white; margin-bottom: 20px; outline: none; font-family: 'Poppins'; }
+        .rules-footer { background: #000; color: var(--gold); padding: 40px 20px; text-align: center; font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 100px; line-height: 1.8; }
+        .footer-fixo { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-top: 2px solid var(--gold); backdrop-filter: blur(10px); }
+        .btn-whatsapp { background: var(--gold); color: black; padding: 15px 40px; border-radius: 50px; font-weight: bold; cursor: pointer; text-transform: uppercase; border: none; letter-spacing: 1px; }
 
-        .selector { display: flex; align-items: center; justify-content: center; gap: 20px; }
-        .btn-math { background: var(--gold); border: none; color: black; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-weight: bold; }
-
-        /* Checkout e Termos */
-        .checkout-box { background: rgba(20, 20, 20, 0.9); padding: 50px; border-radius: 40px; margin-top: 80px; border: 1px solid var(--gold); }
-        .form-group input, .form-group select, .form-group textarea { 
-            background: transparent; border: none; border-bottom: 1px solid rgba(255,255,255,0.2);
-            width: 100%; padding: 15px 5px; color: white; margin-bottom: 25px; outline: none; font-family: 'Poppins';
-        }
-        .form-group input:focus { border-bottom-color: var(--gold); }
-
-        .rules-footer { background: #111; color: var(--gold); padding: 30px; text-align: center; font-size: 0.9rem; letter-spacing: 1px; margin-top: 50px; border-top: 1px solid var(--gold); }
-
-        .footer-fixo { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(0,0,0,0.95); padding: 25px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-top: 2px solid var(--gold); backdrop-filter: blur(10px); }
-        .btn-whatsapp { background: var(--gold); color: black; padding: 15px 45px; border-radius: 50px; font-weight: bold; cursor: pointer; text-transform: uppercase; border: none; }
-
-        @media (max-width: 600px) { .hero h1 { font-size: 2.5rem; } .footer-fixo { flex-direction: column; gap: 15px; text-align: center; padding: 15px; } }
+        @media (max-width: 600px) { .footer-fixo { flex-direction: column; gap: 10px; padding: 15px; } .hero h1 { font-size: 2.2rem; } }
     </style>
 </head>
-<body>
+    <body>
 <div class="hero">
+    <img src="https://lh3.googleusercontent.com/d/1mm0yJAfzQy872k5FHDykXwogCPXd2tef" alt="Any Gourmet Logo" class="brand-logo">
     <h1>Any Gourmet</h1>
     <p>Exclusividade em cada detalhe</p>
 </div>
@@ -103,7 +84,7 @@
     <div id="grid-premium" class="grid-doces"></div>
 
     <div class="checkout-box">
-        <h3 style="font-family: 'Cinzel'; color: var(--gold); margin-bottom: 40px; text-align: center;">Detalhes da Reserva</h3>
+        <h3 style="font-family: 'Cinzel'; color: var(--gold); margin-bottom: 30px; text-align: center;">Detalhes da Reserva</h3>
         <div class="form-group"><input type="text" id="cli_nome" placeholder="NOME COMPLETO"></div>
         <div class="form-group"><input type="text" id="cli_end" placeholder="ENDEREÇO DE ENTREGA"></div>
         <div class="form-group"><textarea id="cli_obs" rows="2" placeholder="OBSERVAÇÕES (CORES, TEMA, DATA)"></textarea></div>
@@ -118,18 +99,19 @@
 </div>
 
 <div class="rules-footer">
-    ✨ ANTECEDÊNCIA DE 5 A 30 DIAS PARA ENCOMENDAS ✨<br>
-    POLÍTICA DE PAGAMENTO: 50% NO ATO DO PEDIDO E 50% NA ENTREGA
+    ✨ <strong>POLÍTICA DA BOUTIQUE</strong> ✨<br>
+    ANTECEDÊNCIA DE 5 A 30 DIAS PARA ENCOMENDAS<br>
+    50% NO ATO DO PEDIDO PARA RESERVA DE DATA • 50% NA ENTREGA
 </div>
 
 <div class="footer-fixo">
     <div>
-        <small style="color: var(--gold); letter-spacing: 2px;">VALOR DA EXPERIÊNCIA</small>
-        <div style="font-size: 2rem; font-family: 'Cinzel';">R$ <span id="total-val">0,00</span></div>
+        <small style="color: var(--gold); letter-spacing: 1px;">TOTAL ESTIMADO</small>
+        <div style="font-size: 1.8rem; font-family: 'Cinzel';">R$ <span id="total-val">0,00</span></div>
     </div>
-    <button class="btn-whatsapp" onclick="enviarPedido()">Finalizar via WhatsApp</button>
-</div>
-<script>
+    <button class="btn-whatsapp" onclick="enviarPedido()">Solicitar via WhatsApp</button>
+    </div>
+    <script>
     const precos = {
         tradicional: [{min: 25, p: 1.80}, {min: 20, p: 2.00}, {min: 15, p: 2.40}, {min: 12, p: 2.60}, {min: 10, p: 2.80}, {min: 8, p: 3.20}, {min: 5, p: 4.00}],
         especial: [{min: 25, p: 1.90}, {min: 20, p: 2.15}, {min: 15, p: 2.60}, {min: 12, p: 2.85}, {min: 10, p: 3.10}, {min: 8, p: 3.55}, {min: 5, p: 4.50}],
@@ -137,17 +119,14 @@
     };
 
     const itens = [
-        // TRADICIONAIS - Cacau atualizado com novo link
         { id: 1, cat: "tradicional", nome: "Cacau", desc: "Massa de Cacau com granulado crocante de chocolate.", img: "https://portalamais.com/wp-content/uploads/2025/02/FOTOS-SITE-34.png" },
         { id: 2, cat: "tradicional", nome: "Ninho", desc: "Massa e finalização no legítimo Leite Ninho.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShj4xnz9w6b4hSse6DmFKZmNz8AGlPsOQoqxEXzcSukMZ9apDQ0qhi3zU&s=10" },
         { id: 3, cat: "tradicional", nome: "Morango", desc: "Massa de morango finalizada no leite em pó.", img: "https://i.ytimg.com/vi/4kxCUWXbJ1M/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBO9PSzsdRU0PUkLh0hE8Tn24l89A" },
         { id: 4, cat: "tradicional", nome: "Red Velvet", desc: "Massa de baunilha com chocolate e açúcar vermelho.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwZP2ZLe0WDVlhOvA5dpJ8Kh9smG1pog8Z1fc3O5wxNEazZFgSFwfj7i4&s=10" },
-        // ESPECIAIS
         { id: 5, cat: "especial", nome: "Cajuzinho", desc: "Massa de amendoim com chocolate e açúcar refinado.", img: "https://sodiedocesusa.com/i-drive/wp-content/uploads/sites/3/2023/07/25838_fotos_produtos_1024x683px-IMG_8251.png" },
         { id: 6, cat: "especial", nome: "Maracujá", desc: "Massa de maracujá finalizada com leite ninho.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRypPaSsRCcmeeLLQGLB4SEa1BIcaQBN3k0UIycKUtdEb1grjhmPbVze3TN&s=10" },
         { id: 7, cat: "especial", nome: "Amendoim", desc: "Massa de paçoca finalizada no amendoim triturado.", img: "https://anamariabrogui.com.br/assets/uploads/receitas/fotos/usuario-3137-6fd8d217b7e78f491b32558f26c101ed.png" },
         { id: 8, cat: "especial", nome: "Capuccino", desc: "Massa de café finalizada no cacau em pó.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4bga8f58rra_Aa8uuvpkdyP-_h3pCDvOvWJLy_horJcN2dBizjshJCgY&s=10" },
-        // PREMIUM
         { id: 9, cat: "premium", nome: "Churros", desc: "Massa de doce de leite com açúcar e canela.", img: "https://bocadoforno.com.br/wp-content/uploads/2024/10/docinho-de-churros.webp" },
         { id: 10, cat: "premium", nome: "Confete", desc: "Massa de chocolate finalizada com confetes coloridos.", img: "https://reidobrigadeirogourmet.com.br/wp-content/uploads/2018/09/Confeti.png" },
         { id: 11, cat: "premium", nome: "Ferrero Rocher", desc: "Chocolate, amendoim e um topo generoso de Nutella.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCrrnDZMeRatHVW8b7ZFcZb9sKWikDoTiJf99USAfp_OiVhsCT5MmcmrMx&s=10" },
@@ -198,23 +177,16 @@
     function enviarPedido() {
         const n = document.getElementById('cli_nome').value;
         const e = document.getElementById('cli_end').value;
-        if(!n || !e) return alert("Por favor, preencha o nome e endereço.");
-        let msg = `✨ *ANY GOURMET - PEDIDO EXCLUSIVO* ✨\n\n👤 *Cliente:* ${n}\n📍 *End:* ${e}\n💳 *Pagto:* ${document.getElementById('cli_pagto').value}\n`;
+        if(!n || !e) return alert("Por favor, informe seu nome e endereço.");
+        let msg = `✨ *ANY GOURMET - PEDIDO* ✨\n\n👤 *Cliente:* ${n}\n📍 *End:* ${e}\n💳 *Pagto:* ${document.getElementById('cli_pagto').value}\n`;
         if(document.getElementById('cli_obs').value) msg += `📝 *Obs:* ${document.getElementById('cli_obs').value}\n`;
-        msg += `\n🛍️ *SELEÇÃO:*\n`;
-        let has = false;
-        for (let id in cart) {
-            if (cart[id].qty > 0) {
-                has = true;
-                msg += `• ${cart[id].qty}x ${cart[id].nome}\n`;
-            }
-        }
-        if(!has) return alert("Sua sacola está vazia.");
+        msg += `\n🛍️ *ITENS:*\n`;
+        for (let id in cart) { if (cart[id].qty > 0) msg += `• ${cart[id].qty}x ${cart[id].nome}\n`; }
         msg += `\n💰 *TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
-        msg += `\n\n_Lembrando: 50% de sinal para confirmação._`;
         window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`);
     }
     setup();
 </script>
 </body>
 </html>
+
