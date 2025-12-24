@@ -3,96 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Any Gourmet | Experiência Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Any Gourmet | Boutique Exclusive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a059; --dark-brown: #3d2b1f; --bg-cream: #fdfaf6; --soft-white: #ffffff; }
+        :root { --gold: #d4af37; --cream: #fdfaf6; --dark: #1a1a1a; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-cream); color: var(--dark-brown); line-height: 1.6; padding-bottom: 120px; }
         
-        header { 
-            background: linear-gradient(rgba(61, 43, 31, 0.85), rgba(61, 43, 31, 0.85)), url('https://www.transparenttextures.com/patterns/padded-little.png');
-            padding: 60px 20px; text-align: center; color: var(--soft-white); border-bottom: 4px solid var(--gold);
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Imagem de fundo em alta definição (Brigadeiros Gourmet) */
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1548943487-a2e4d43b4853?q=80&w=2070&auto=format&fit=crop');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            color: white;
         }
-        header h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; letter-spacing: 2px; }
+
+        header {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        header h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 3.5rem; 
+            letter-spacing: 4px; 
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        /* Efeito de Vidro nos Cards */
+        .grid-doces { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
         
-        .rules-banner { background: var(--gold); color: white; padding: 12px; text-align: center; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; }
+        .card-doce {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 30px;
+            text-align: center;
+            transition: 0.5s;
+        }
 
-        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .category-header { text-align: center; margin: 50px 0 30px; position: relative; }
-        .category-header h2 { font-family: 'Playfair Display', serif; font-size: 2rem; background: var(--bg-cream); padding: 0 20px; position: relative; z-index: 2; }
-        .category-header::after { content: ""; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: var(--gold); z-index: 1; }
+        .card-doce:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-10px);
+            border-color: var(--gold);
+        }
 
-        .grid-doces { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card-doce { background: var(--soft-white); border-radius: 20px; padding: 20px; text-align: center; border: 1px solid rgba(197, 160, 89, 0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.02); transition: 0.3s; }
-        .card-doce:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(197, 160, 89, 0.12); }
-        .doce-img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 2px solid var(--gold); padding: 3px; }
+        .doce-img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 3px solid var(--gold);
+            padding: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
 
-        .selector { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 15px; }
-        .btn-math { background: none; border: 1px solid var(--gold); color: var(--gold); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
-        .btn-math:hover { background: var(--gold); color: white; }
+        .card-doce h4 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--gold); margin-bottom: 10px; }
+        .doce-desc { font-size: 0.9rem; font-weight: 300; opacity: 0.8; margin-bottom: 20px; min-height: 50px; }
 
-        .checkout-box { background: var(--soft-white); padding: 30px; border-radius: 25px; margin-top: 60px; border: 1px solid var(--gold); }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid #eee; border-radius: 10px; font-family: 'Poppins'; }
+        .selector { display: flex; align-items: center; justify-content: center; gap: 20px; }
+        
+        .btn-math {
+            background: var(--gold);
+            border: none;
+            color: black;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-        .footer-fixo { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 600px; background: rgba(61, 43, 31, 0.95); padding: 15px 30px; border-radius: 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border: 1px solid var(--gold); color: white; }
-        .btn-whatsapp { background: var(--gold); color: white; padding: 10px 25px; border-radius: 25px; border: none; font-weight: 600; cursor: pointer; }
+        /* Checkout Elegante */
+        .checkout-box {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold);
+            border-radius: 40px;
+            padding: 40px;
+            margin-top: 100px;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .footer-fixo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 25px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 2px solid var(--gold);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(45deg, #d4af37, #f2d06b);
+            color: black;
+            padding: 15px 40px;
+            border-radius: 40px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
     </style>
 </head>
     <body>
-<header>
-    <h1>Any Gourmet</h1>
-    <p>Sabores de Luxo para Momentos Inesquecíveis</p>
-</header>
+    <header>
+        <h1>Any Gourmet</h1>
+        <p style="letter-spacing: 5px; font-weight: 300;">ARTISAN CONFECTIONERY</p>
+    </header>
 
-<div class="rules-banner">
-    ✨ ANTECEDÊNCIA DE 5 A 30 DIAS • PAGAMENTO: 50% NO PEDIDO / 50% NA ENTREGA ✨
-</div>
-
-<div class="container">
-    <div class="category-header"><h2>Tradicionais</h2></div>
-    <div id="grid-tradicional" class="grid-doces"></div>
-
-    <div class="category-header"><h2>Especiais</h2></div>
-    <div id="grid-especial" class="grid-doces"></div>
-
-    <div class="category-header"><h2>Premium</h2></div>
-    <div id="grid-premium" class="grid-doces"></div>
-
-    <div class="checkout-box">
-        <h3 style="text-align: center; font-family: 'Playfair Display'; margin-bottom: 20px;">Detalhes da Encomenda</h3>
-        <div class="form-group">
-            <label>Nome Completo</label>
-            <input type="text" id="cli_nome" placeholder="Como podemos lhe chamar?">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Nossa Seleção</h2>
+            <div style="width: 60px; height: 3px; background: var(--gold); margin: 15px auto;"></div>
         </div>
-        <div class="form-group">
-            <label>Endereço de Entrega (Rua, Número e Bairro)</label>
-            <input type="text" id="cli_end" placeholder="Ex: Rua das Flores, 123 - Aldeota">
-        </div>
-        <div class="form-group">
-            <label>Observações / Temas</label>
-            <textarea id="cli_obs" rows="2" placeholder="Cores de preferência ou detalhes do evento..."></textarea>
-        </div>
-        <div class="form-group">
-            <label>Forma de Pagamento</label>
-            <select id="cli_pagto">
-                <option value="Pix">Pix (Sinal de 50%)</option>
-                <option value="Cartão">Cartão (Link com acréscimo)</option>
-                <option value="Dinheiro">Dinheiro</option>
-            </select>
+
+        <div id="grid-tradicional" class="grid-doces"></div>
+        <div id="grid-especial" class="grid-doces" style="margin-top: 40px;"></div>
+        <div id="grid-premium" class="grid-doces" style="margin-top: 40px;"></div>
+
+        <div class="checkout-box">
+            <h3 style="font-family: 'Playfair Display'; font-size: 2rem; color: var(--gold); text-align: center; margin-bottom: 30px;">Agendar Entrega</h3>
+            <div class="form-group">
+                <input type="text" id="cli_nome" placeholder="Seu Nome Completo">
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <input type="text" id="cli_end" placeholder="Endereço de Entrega (Rua, Bairro, Nº)">
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <textarea id="cli_obs" rows="3" placeholder="Observações (Tema, Cores, Horário)"></textarea>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="footer-fixo">
-    <div>
-        <small style="color: var(--gold); display: block;">Total Estimado</small>
-        <strong style="font-size: 1.5rem;">R$ <span id="total-display">0,00</span></strong>
-    </div>
-    <button class="btn-whatsapp" onclick="enviarPedido()">Solicitar Agora</button>
-</div>
+    <div class="footer-fixo">
+        <div>
+            <span style="font-size: 0.8rem; color: var(--gold);">VALOR DO INVESTIMENTO</span>
+            <div style="font-size: 1.8rem; font-family: 'Playfair Display';">R$ <span id="total-val">0,00</span></div>
+        </div>
+        <button class="btn-whatsapp" onclick="enviarPedido()">Enviar para o Atelier</button>
+                </div>
         <script>
     const precos = {
         tradicional: [{min: 25, p: 1.80}, {min: 20, p: 2.00}, {min: 15, p: 2.40}, {min: 12, p: 2.60}, {min: 10, p: 2.80}, {min: 8, p: 3.20}, {min: 5, p: 4.00}],
@@ -100,77 +170,78 @@
         premium: [{min: 25, p: 2.00}, {min: 20, p: 2.30}, {min: 15, p: 2.80}, {min: 12, p: 3.10}, {min: 10, p: 3.40}, {min: 8, p: 3.90}, {min: 5, p: 5.00}]
     };
 
-    const catalogo = [
-        { id: 1, cat: "tradicional", nome: "Cacau", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShj4xnz9w6b4hSse6DmFKZmNz8AGlPsOQoqxEXzcSukMZ9apDQ0qhi3zU&s=10" },
-        { id: 2, cat: "tradicional", nome: "Ninho", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShj4xnz9w6b4hSse6DmFKZmNz8AGlPsOQoqxEXzcSukMZ9apDQ0qhi3zU&s=10" },
-        { id: 3, cat: "tradicional", nome: "Morango", img: "https://i.ytimg.com/vi/4kxCUWXbJ1M/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBO9PSzsdRU0PUkLh0hE8Tn24l89A" },
-        { id: 4, cat: "tradicional", nome: "Red Velvet", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwZP2ZLe0WDVlhOvA5dpJ8Kh9smG1pog8Z1fc3O5wxNEazZFgSFwfj7i4&s=10" },
-        { id: 5, cat: "especial", nome: "Cajuzinho", img: "https://sodiedocesusa.com/i-drive/wp-content/uploads/sites/3/2023/07/25838_fotos_produtos_1024x683px-IMG_8251.png" },
-        { id: 6, cat: "especial", nome: "Maracujá", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRypPaSsRCcmeeLLQGLB4SEa1BIcaQBN3k0UIycKUtdEb1grjhmPbVze3TN&s=10" },
-        { id: 7, cat: "especial", nome: "Amendoim", img: "https://anamariabrogui.com.br/assets/uploads/receitas/fotos/usuario-3137-6fd8d217b7e78f491b32558f26c101ed.png" },
-        { id: 8, cat: "especial", nome: "Capuccino", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4bga8f58rra_Aa8uuvpkdyP-_h3pCDvOvWJLy_horJcN2dBizjshJCgY&s=10" },
-        { id: 9, cat: "premium", nome: "Churros", img: "https://bocadoforno.com.br/wp-content/uploads/2024/10/docinho-de-churros.webp" },
-        { id: 10, cat: "premium", nome: "Confete", img: "https://reidobrigadeirogourmet.com.br/wp-content/uploads/2018/09/Confeti.png" },
-        { id: 11, cat: "premium", nome: "Ferrero Rocher", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCrrnDZMeRatHVW8b7ZFcZb9sKWikDoTiJf99USAfp_OiVhsCT5MmcmrMx&s=10" },
-        { id: 12, cat: "premium", nome: "Ninho com Nutella", img: "https://www.confeitariahelena.com.br/img/painel/medias/(1)docinho-de-leite-ninho-com-nutella-confeitaria-helena.jpg" },
-        { id: 13, cat: "premium", nome: "Morango com Nutella", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZW6eN4s0ioqA9IY2yVcLTsSzzUff9XXSWMbUW60OFFELeXqDcN7YnbXU&s=10" }
+    const doces = [
+        { id: 1, cat: "tradicional", nome: "Cacau", desc: "Intensidade do puro cacau em camadas crocantes.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShj4xnz9w6b4hSse6DmFKZmNz8AGlPsOQoqxEXzcSukMZ9apDQ0qhi3zU&s=10" },
+        { id: 2, cat: "tradicional", nome: "Ninho", desc: "O clássico aveludado com o melhor leite em pó.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShj4xnz9w6b4hSse6DmFKZmNz8AGlPsOQoqxEXzcSukMZ9apDQ0qhi3zU&s=10" },
+        { id: 3, cat: "tradicional", nome: "Morango", desc: "Frescor da fruta envolto em doçura artesanal.", img: "https://i.ytimg.com/vi/4kxCUWXbJ1M/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBO9PSzsdRU0PUkLh0hE8Tn24l89A" },
+        { id: 4, cat: "tradicional", nome: "Red Velvet", desc: "A sofisticação do veludo vermelho em forma de doce.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwZP2ZLe0WDVlhOvA5dpJ8Kh9smG1pog8Z1fc3O5wxNEazZFgSFwfj7i4&s=10" },
+        { id: 5, cat: "especial", nome: "Cajuzinho", desc: "A tradição brasileira com um toque gourmet.", img: "https://sodiedocesusa.com/i-drive/wp-content/uploads/sites/3/2023/07/25838_fotos_produtos_1024x683px-IMG_8251.png" },
+        { id: 6, cat: "especial", nome: "Maracujá", desc: "Equilíbrio perfeito entre a acidez e o doce.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRypPaSsRCcmeeLLQGLB4SEa1BIcaQBN3k0UIycKUtdEb1grjhmPbVze3TN&s=10" },
+        { id: 7, cat: "especial", nome: "Amendoim", desc: "Crocância e sabor marcante do amendoim torrado.", img: "https://anamariabrogui.com.br/assets/uploads/receitas/fotos/usuario-3137-6fd8d217b7e78f491b32558f26c101ed.png" },
+        { id: 8, cat: "especial", nome: "Capuccino", desc: "Aroma de café espresso para paladares exigentes.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4bga8f58rra_Aa8uuvpkdyP-_h3pCDvOvWJLy_horJcN2dBizjshJCgY&s=10" },
+        { id: 9, cat: "premium", nome: "Churros", desc: "Doce de leite artesanal com toque de canela.", img: "https://bocadoforno.com.br/wp-content/uploads/2024/10/docinho-de-churros.webp" },
+        { id: 10, cat: "premium", nome: "Confete", desc: "Diversão e sabor em uma explosão colorida.", img: "https://reidobrigadeirogourmet.com.br/wp-content/uploads/2018/09/Confeti.png" },
+        { id: 11, cat: "premium", nome: "Ferrero Rocher", desc: "Avelãs nobres e o luxo do chocolate italiano.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCrrnDZMeRatHVW8b7ZFcZb9sKWikDoTiJf99USAfp_OiVhsCT5MmcmrMx&s=10" },
+        { id: 12, cat: "premium", nome: "Ninho com Nutella", desc: "A união sagrada da confeitaria moderna.", img: "https://www.confeitariahelena.com.br/img/painel/medias/(1)docinho-de-leite-ninho-com-nutella-confeitaria-helena.jpg" },
+        { id: 13, cat: "premium", nome: "Morango com Nutella", desc: "O encontro irresistível da fruta com avelã.", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZW6eN4s0ioqA9IY2yVcLTsSzzUff9XXSWMbUW60OFFELeXqDcN7YnbXU&s=10" }
     ];
 
-    let order = {};
+    let cart = {};
 
     function render() {
-        catalogo.forEach(d => {
+        doces.forEach(d => {
             document.getElementById(`grid-${d.cat}`).innerHTML += `
                 <div class="card-doce">
                     <img src="${d.img}" class="doce-img">
                     <h4>${d.nome}</h4>
+                    <p class="doce-desc">${d.desc}</p>
                     <div class="selector">
-                        <button class="btn-math" onclick="change(${d.id}, -1)">-</button>
-                        <span id="qty-${d.id}">0</span>
-                        <button class="btn-math" onclick="change(${d.id}, 1)">+</button>
+                        <button class="btn-math" onclick="update(${d.id}, -1)">-</button>
+                        <span id="q-${d.id}" style="font-weight:600; font-size:1.3rem">0</span>
+                        <button class="btn-math" onclick="update(${d.id}, 1)">+</button>
                     </div>
                 </div>`;
         });
     }
 
-    function change(id, val) {
-        if (!order[id]) order[id] = { ...catalogo.find(x => x.id === id), qty: 0 };
-        order[id].qty += val;
-        if (order[id].qty < 0) order[id].qty = 0;
-        document.getElementById(`qty-${id}`).innerText = order[id].qty;
-        calc();
+    function update(id, val) {
+        if (!cart[id]) cart[id] = { ...doces.find(x => x.id === id), qty: 0 };
+        cart[id].qty += val;
+        if (cart[id].qty < 0) cart[id].qty = 0;
+        document.getElementById(`q-${id}`).innerText = cart[id].qty;
+        recalc();
     }
 
-    function calc() {
+    function recalc() {
         let total = 0;
-        for (let id in order) {
-            let item = order[id];
+        for (let id in cart) {
+            let item = cart[id];
             if (item.qty > 0) {
                 let faixa = precos[item.cat].find(f => item.qty >= f.min) || precos[item.cat][precos[item.cat].length-1];
                 total += item.qty * faixa.p;
             }
         }
-        document.getElementById('total-display').innerText = total.toFixed(2).replace('.', ',');
+        document.getElementById('total-val').innerText = total.toFixed(2).replace('.', ',');
     }
 
     function enviarPedido() {
-        const nome = document.getElementById('cli_nome').value;
-        const end = document.getElementById('cli_end').value;
-        if(!nome || !end) return alert("Por favor, preencha nome e endereço.");
+        const n = document.getElementById('cli_nome').value;
+        const e = document.getElementById('cli_end').value;
+        if(!n || !e) return alert("Por favor, informe seu nome e endereço.");
 
-        let msg = `✨ *ANY GOURMET - PEDIDO* ✨\n\n👤 *Cliente:* ${nome}\n📍 *Endereço:* ${end}\n💳 *Pagto:* ${document.getElementById('cli_pagto').value}\n`;
+        let msg = `✨ *ANY GOURMET - EXPERIÊNCIA PRIVÉE* ✨\n\n👤 *Cliente:* ${n}\n📍 *End:* ${e}\n`;
         if(document.getElementById('cli_obs').value) msg += `📝 *Obs:* ${document.getElementById('cli_obs').value}\n`;
         
-        msg += `\n🛍️ *ITENS:*\n`;
+        msg += `\n🛍️ *SELEÇÃO ESCOLHIDA:*\n`;
         let has = false;
-        for (let id in order) {
-            if (order[id].qty > 0) {
+        for (let id in cart) {
+            if (cart[id].qty > 0) {
                 has = true;
-                msg += `• ${order[id].qty}x ${order[id].nome}\n`;
+                msg += `• ${cart[id].qty}x ${cart[id].nome}\n`;
             }
         }
-        if(!has) return alert("Escolha pelo menos um doce.");
-        msg += `\n💰 *TOTAL ESTIMADO: R$ ${document.getElementById('total-display').innerText}*`;
+        if(!has) return alert("Sua sacola está vazia.");
+        msg += `\n💰 *INVESTIMENTO TOTAL: R$ ${document.getElementById('total-val').innerText}*`;
         window.open(`https://wa.me/5585992000433?text=${encodeURIComponent(msg)}`);
     }
     render();
